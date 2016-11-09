@@ -1,64 +1,189 @@
-Cerberus Archaius client library
-==========================
+# Cerberus Archaius Client
 
-This is a shared library that provides an Archaius client for projects using Cerberus.
+[ ![Download](https://api.bintray.com/packages/nike/maven/cerberus-archaius-client/images/download.svg) ](https://bintray.com/nike/maven/cerberus-archaius-client/_latestVersion)
+[![][travis img]][travis]
+[![Coverage Status](https://coveralls.io/repos/github/Nike-Inc/cerberus-archaius-client/badge.svg)](https://coveralls.io/github/Nike-Inc/cerberus-archaius-client)
+[![][license img]][license]
 
-## Usage
+A java based client library that surfaces Cerberus secrets via Archaius.
 
-Include in your project:
+## Quickstart
 
-    compile 'com.nike.cpe:cerberus-archaius-client:<version>'
-
-
-### Using the Archaius provider
+### Using the Archaius Provider
 
 There are two ways in which you can use the Archaius provider that comes with the cerberus client.
 
-1. Add the configuration source to the ConfigurationManager - this way, the properties stored in Cerberus will treated
-as just another set of properties in addition to existing sources like property files. All properties can then be 
-accessed using the DynamicPropertyFactory.getInstance().getXXX methods.
+#### CerberusConfigurationSource or NamespacedCerberusConfigurationSource
+
+There are two configuration source classes provided by this client.  The major difference is how the properties pulled 
+from Cerberus are keyed.
+
+**CerberusConfigurationSource**
+
+Properties pulled from Cerberus and added to the configuration source will be keyed exactly the same way they are in
+Cerberus.
+
+For example, if you configure this to pull properties from the a path, such as `app/demo/config`, each key/value pair
+at that node will be exposed as-is throughout all of Archaius.  If there are no chances of a collision or things are 
+scoped appropriately, this may not be an issue.
+
+**NamespacedCerberusConfigurationSource**
+
+Properties pulled from Cerberus and added to the configuration source will be keyed using the full path to the property.
+
+For example, if we have property `foo` and `bar` at the path, `app/demo/config`, each will be added to the configuration 
+source with the key of `app.demo.config.foo` and `app.demo.config.bar` respectively.  This is useful in mitigating the 
+chances for property name collision in Archaius.  
+
+*The examples below use NamespacedCerberusConfigurationSource*
+
+#### Add the Configuration Source to the ConfigurationManager
+
+Using this pattern, the properties stored in Cerberus will treated as just another set of properties in addition to 
+existing sources like property files. All properties can then be accessed using the 
+DynamicPropertyFactory.getInstance().getXXX methods.
 
 The code shown below is a sample implementation of AbstractModule that instantiates a PolledConfigurationSource and 
 adds it to the existing ConfigurationManager.
-	
-	public class ArchaiusGuiceModule extends AbstractModule {
 
-    @Override
-    protected void configure() {
-        final PolledConfigurationSource polledConfigurationSource = new CerberusConfigurationSource(
-                ArchaiusCerberusClientFactory.getClient(), "path to SDB");
-        final AbstractPollingScheduler abstractPollingScheduler = new FixedDelayPollingScheduler(1000, 1000 * 60 * 30,
-                true);
-        final DynamicConfiguration cerberusConfig = new DynamicConfiguration(polledConfigurationSource,
-                abstractPollingScheduler);
-        final ConcurrentCompositeConfiguration configInstance = (ConcurrentCompositeConfiguration) ConfigurationManager
-                .getConfigInstance();
-        configInstance.addConfiguration(cerberusConfig);
-    	   }
-	}
+``` java
+    public class CerberusArchaiusModule extends AbstractModule {
+        private final Logger logger = LoggerFactory.getLogger(getClass());
+    
+        private static final int POLL_INIT_DELAY = 1000;
+        private static final int SECRETS_POLL_INTERVAL = (int) TimeUnit.HOURS.toMillis(1);
+        private static final String SECRETS_PATH_PROP_NAME = "cerberus.config.path";
+        private static final String SECRETS_DEFAULT_VAULT_PATH = "app/cerberus-demo/config";
+    
+        @Override
+        protected void configure() {
+            /*
+             * First let's look up the path for where to read in Cerberus.
+             * This examples show us attempting to source it from an Archaius property, but defaulting if not found.
+             */
+            final String vaultPath = DynamicPropertyFactory.getInstance()
+                    .getStringProperty(SECRETS_PATH_PROP_NAME, SECRETS_DEFAULT_VAULT_PATH)
+                    .get();
+    
+            /*
+             * So long as we've got a path, let's configure the polling of config from Cerberus into Archaius.
+             */
+            if (vaultPath != null && !vaultPath.isEmpty()) {
+                logger.info("Adding Cerberus as Configuration source. Vault Path = " + vaultPath);
+    
+                /*
+                 * Create a configuration source passing in a Cerberus client using the ArchaiusCerberusClientFactory and
+                 * the path we looked up above.  This factory will attempt to resolve cerberus configuration detailts,
+                 * like the URL and token from Archaius properties.
+                 */
+                final PolledConfigurationSource polledConfigurationSource = new NamespacedCerberusConfigurationSource(
+                        ArchaiusCerberusClientFactory.getClient(), vaultPath);
+    
+                /*
+                 * Setup the scheduler for how often this configuration source should be refreshed.
+                 */
+                final AbstractPollingScheduler abstractPollingScheduler = new FixedDelayPollingScheduler(
+                        POLL_INIT_DELAY, SECRETS_POLL_INTERVAL, true);
+    
+                /*
+                 * Wrap that in a DynamicConfiguration object and add it to the configuration instance.
+                 */
+                final DynamicConfiguration cerberusConfig = new DynamicConfiguration(polledConfigurationSource,
+                        abstractPollingScheduler);
+    
+                final ConcurrentCompositeConfiguration configInstance = (ConcurrentCompositeConfiguration) ConfigurationManager
+                        .getConfigInstance();
+    
+                configInstance.addConfiguration(cerberusConfig);
+            } else {
+                logger.info("Property corresponding to the Vault path for secrets not found! "
+                        + "Cerberus not added as Configuration source");
+            }
+        }
+    }
+```
 
-2. Use DynamicConfiguration as is - the ConfigurationManager instance that exists is not modified in any way, and the
+#### Use a DynamicConfiguration object
+
+With this pattern, the ConfigurationManager instance that exists is not modified in any way, and the
 properties stored in Cerberus are read using the cerberusConfig.getXXX methods. This might be useful in cases where the
 properties that need to distinct but have their names duplicated across different sources that cannot be worked around -
 say, in case of external dependencies using Cerberus, which use a property having the same name. 	
 
 The code snippet shown below is an example of how this can be done.
 
-	   ...
-	   ...
-	   final PolledConfigurationSource polledConfigurationSourceA = new CerberusConfigurationSource(
-                ArchaiusCerberusClientFactory.getClient(), "path to SDB of source A");
-       final PolledConfigurationSource polledConfigurationSourceB = new CerberusConfigurationSource(
-                ArchaiusCerberusClientFactory.getClient(), "path to SDB of source B");
-        final AbstractPollingScheduler abstractPollingScheduler = new FixedDelayPollingScheduler(1000, 1000 * 60 * 30,
-                true);
-        final DynamicConfiguration cerberusConfigA = new DynamicConfiguration(polledConfigurationSourceA,
-                abstractPollingScheduler);
-        final DynamicConfiguration cerberusConfigB = new DynamicConfiguration(polledConfigurationSourceB,
-                abstractPollingScheduler);
-        final String propValueFromSourceA = cerberusConfigA.getString("stringPropKeyNameDuplicated");        
-        final String propValueFromSourceB = cerberusConfigB.getString("stringPropKeyNameDuplicated");
-        ...
-                
-In the above example, the property with the name "stringPropKeyNameDuplicated" is found in both sources A and B, 
-but are handled distinctly.
+``` java
+    public class CerberusArchaiusModule extends AbstractModule {
+        private final Logger logger = LoggerFactory.getLogger(getClass());
+    
+        private static final int POLL_INIT_DELAY = 1000;
+        private static final int SECRETS_POLL_INTERVAL = (int) TimeUnit.HOURS.toMillis(1);
+        private static final String SECRETS_PATH_PROP_NAME = "cerberus.config.path";
+        private static final String SECRETS_DEFAULT_VAULT_PATH = "app/cerberus-demo/config";
+    
+        @Override
+        protected void configure() {
+            /*
+             * First let's look up the path for where to read in Cerberus.
+             * This examples show us attempting to source it from an Archaius property, but defaulting if not found.
+             */
+            final String vaultPath = DynamicPropertyFactory.getInstance()
+                    .getStringProperty(SECRETS_PATH_PROP_NAME, SECRETS_DEFAULT_VAULT_PATH)
+                    .get();
+    
+            /*
+             * So long as we've got a path, let's configure the polling of config from Cerberus into Archaius.
+             */
+            if (vaultPath != null && !vaultPath.isEmpty()) {
+                logger.info("Adding Cerberus as Configuration source. Vault Path = " + vaultPath);
+    
+                /*
+                 * Create a configuration source passing in a Cerberus client using the ArchaiusCerberusClientFactory and
+                 * the path we looked up above.  This factory will attempt to resolve cerberus configuration detailts,
+                 * like the URL and token from Archaius properties.
+                 */
+                final PolledConfigurationSource polledConfigurationSource = new NamespacedCerberusConfigurationSource(
+                        ArchaiusCerberusClientFactory.getClient(), vaultPath);
+    
+                /*
+                 * Setup the scheduler for how often this configuration source should be refreshed.
+                 */
+                final AbstractPollingScheduler abstractPollingScheduler = new FixedDelayPollingScheduler(
+                        POLL_INIT_DELAY, SECRETS_POLL_INTERVAL, true);
+    
+                /*
+                 * Wrap that in a DynamicConfiguration object and add it to the configuration instance.
+                 */
+                final DynamicConfiguration cerberusConfig = new DynamicConfiguration(polledConfigurationSource,
+                        abstractPollingScheduler);
+    
+                /*
+                 * Now we bind that dynamic configuration so that it can be used elsewhere within the context.
+                 */
+                bind(DynamicConfiguration.class)
+                        .annotatedWith(Names.named("cerberus.config"))
+                        .to(cerberusConfig);
+            } else {
+                logger.info("Property corresponding to the Vault path for secrets not found! "
+                        + "Cerberus not added as Configuration source");
+            }
+        }
+    }
+```
+
+## Further Details
+
+Cerberus Archaius client is a small project. It only has a few classes and they are all fully documented. For further details please see the source code, including javadocs and unit tests.
+
+<a name="license"></a>
+## License
+
+Cerberus Archaius client is released under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+[travis]:https://travis-ci.org/Nike-Inc/cerberus-archaius-client
+[travis img]:https://api.travis-ci.org/Nike-Inc/cerberus-archaius-client.svg?branch=master
+
+[license]:LICENSE.txt
+[license img]:https://img.shields.io/badge/License-Apache%202-blue.svg
+
+[toc]:#table_of_contents
