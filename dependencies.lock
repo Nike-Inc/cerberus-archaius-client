@@ -1,0 +1,212 @@
+{
+    "compile": {
+        "com.netflix.archaius:archaius-aws": {
+            "locked": "0.6.5",
+            "requested": "0.6.5"
+        },
+        "com.nike.cpe:cerberus-client": {
+            "locked": "0.6.4",
+            "requested": "0.6.4"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        },
+        "org.slf4j:slf4j-simple": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        }
+    },
+    "compileClasspath": {
+        "com.netflix.archaius:archaius-aws": {
+            "locked": "0.6.5",
+            "requested": "0.6.5"
+        },
+        "com.nike.cpe:cerberus-client": {
+            "locked": "0.6.4",
+            "requested": "0.6.4"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        },
+        "org.slf4j:slf4j-simple": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        }
+    },
+    "compileOnly": {
+        "com.netflix.archaius:archaius-aws": {
+            "locked": "0.6.5",
+            "requested": "0.6.5"
+        },
+        "com.nike.cpe:cerberus-client": {
+            "locked": "0.6.4",
+            "requested": "0.6.4"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        },
+        "org.slf4j:slf4j-simple": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        }
+    },
+    "default": {
+        "com.netflix.archaius:archaius-aws": {
+            "locked": "0.6.5",
+            "requested": "0.6.5"
+        },
+        "com.nike.cpe:cerberus-client": {
+            "locked": "0.6.4",
+            "requested": "0.6.4"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        },
+        "org.slf4j:slf4j-simple": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        }
+    },
+    "runtime": {
+        "com.netflix.archaius:archaius-aws": {
+            "locked": "0.6.5",
+            "requested": "0.6.5"
+        },
+        "com.nike.cpe:cerberus-client": {
+            "locked": "0.6.4",
+            "requested": "0.6.4"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        },
+        "org.slf4j:slf4j-simple": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        }
+    },
+    "testCompile": {
+        "com.netflix.archaius:archaius-aws": {
+            "locked": "0.6.5",
+            "requested": "0.6.5"
+        },
+        "com.nike.cpe:cerberus-client": {
+            "locked": "0.6.4",
+            "requested": "0.6.4"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.12"
+        },
+        "org.assertj:assertj-core": {
+            "locked": "2.5.0",
+            "requested": "2.5.0"
+        },
+        "org.mockito:mockito-core": {
+            "locked": "1.10.19",
+            "requested": "1.10.19"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        },
+        "org.slf4j:slf4j-simple": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        }
+    },
+    "testCompileClasspath": {
+        "com.netflix.archaius:archaius-aws": {
+            "locked": "0.6.5",
+            "requested": "0.6.5"
+        },
+        "com.nike.cpe:cerberus-client": {
+            "locked": "0.6.4",
+            "requested": "0.6.4"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.12"
+        },
+        "org.assertj:assertj-core": {
+            "locked": "2.5.0",
+            "requested": "2.5.0"
+        },
+        "org.mockito:mockito-core": {
+            "locked": "1.10.19",
+            "requested": "1.10.19"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        },
+        "org.slf4j:slf4j-simple": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        }
+    },
+    "testCompileOnly": {
+        "com.netflix.archaius:archaius-aws": {
+            "locked": "0.6.5",
+            "requested": "0.6.5"
+        },
+        "com.nike.cpe:cerberus-client": {
+            "locked": "0.6.4",
+            "requested": "0.6.4"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.12"
+        },
+        "org.assertj:assertj-core": {
+            "locked": "2.5.0",
+            "requested": "2.5.0"
+        },
+        "org.mockito:mockito-core": {
+            "locked": "1.10.19",
+            "requested": "1.10.19"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        },
+        "org.slf4j:slf4j-simple": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        }
+    },
+    "testRuntime": {
+        "com.netflix.archaius:archaius-aws": {
+            "locked": "0.6.5",
+            "requested": "0.6.5"
+        },
+        "com.nike.cpe:cerberus-client": {
+            "locked": "0.6.4",
+            "requested": "0.6.4"
+        },
+        "junit:junit": {
+            "locked": "4.12",
+            "requested": "4.12"
+        },
+        "org.assertj:assertj-core": {
+            "locked": "2.5.0",
+            "requested": "2.5.0"
+        },
+        "org.mockito:mockito-core": {
+            "locked": "1.10.19",
+            "requested": "1.10.19"
+        },
+        "org.slf4j:slf4j-api": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        },
+        "org.slf4j:slf4j-simple": {
+            "locked": "1.7.14",
+            "requested": "1.7.14"
+        }
+    }
+}
