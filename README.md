@@ -7,6 +7,11 @@
 
 A java based client library that surfaces Cerberus secrets via Archaius.
 
+[Archaius](https://github.com/Netflix/archaius) is a configuration management library created by Netflix which 
+enables dynamic runtime properties from multiple configuration sources such as URLs, JDBC, and Amazon DynamoDB.
+
+To learn more about Cerberus, please visit the [Cerberus website](http://engineering.nike.com/cerberus/).
+
 ## Quickstart
 
 ### Using the Archaius Provider
