@@ -18,6 +18,7 @@ package com.nike.cerberus.archaius.client.provider;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.netflix.config.PollResult;
 import com.nike.vault.client.VaultClient;
 import com.nike.vault.client.VaultServerException;
@@ -26,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -83,7 +85,7 @@ public class CerberusConfigurationSourceTest {
 
     }
 
-    @Test
+    @Test(expected = VaultServerException.class)
     public void poll_only_loads_data_for_path1() {
         // mock dependencies
         final Map<String, String> foobinatorMap = Maps.newHashMap();
@@ -94,13 +96,22 @@ public class CerberusConfigurationSourceTest {
         when(vaultClient.read(PATH_2)).thenThrow(new VaultServerException(500, Lists.newArrayList("Internal error.")));
 
         // call the method under test
-        PollResult result = subject.poll(true, null);
+        subject.poll(true, null);
+    }
 
-        // verify results
-        assertThat(result).isNotNull();
-        assertThat(result.getComplete()).isNotNull();
-        assertThat(result.getComplete()).containsOnlyKeys(FOOBINATOR_CONFIG_KEY);
+    @Test(expected = IllegalArgumentException.class)
+    public void test_constructor_validation_vault_client_cannot_be_null() {
+        new CerberusConfigurationSource(null, Sets.newHashSet("/fake/path"));
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void test_constructor_validation_paths_cannot_be_null() {
+        new CerberusConfigurationSource(vaultClient, (Set<String>)null );
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_constructor_validation_paths_cannot_be_empty() {
+        new CerberusConfigurationSource(vaultClient, Sets.<String>newHashSet());
     }
 
 }

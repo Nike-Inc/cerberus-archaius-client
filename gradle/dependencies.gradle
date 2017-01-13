@@ -23,7 +23,11 @@ repositories {
 
 dependencies {
     compile 'com.netflix.archaius:archaius-aws:0.6.5'
-    compile 'com.nike:cerberus-client:1.0.0'
+    compile 'com.nike:cerberus-client:1.2.0'
+
+    compile "org.apache.commons:commons-lang3:3.5"
+    compile "com.squareup.okhttp3:okhttp:3.3.1"
+
     compile 'org.slf4j:slf4j-api:1.7.14'
     compile 'org.slf4j:slf4j-simple:1.7.14'
 
