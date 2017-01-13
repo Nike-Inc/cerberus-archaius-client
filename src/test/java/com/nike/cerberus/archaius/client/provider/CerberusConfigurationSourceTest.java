@@ -18,6 +18,7 @@ package com.nike.cerberus.archaius.client.provider;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.netflix.config.PollResult;
 import com.nike.vault.client.VaultClient;
 import com.nike.vault.client.VaultServerException;
@@ -26,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -95,6 +97,21 @@ public class CerberusConfigurationSourceTest {
 
         // call the method under test
         subject.poll(true, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_constructor_validation_vault_client_cannot_be_null() {
+        new CerberusConfigurationSource(null, Sets.newHashSet("/fake/path"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_constructor_validation_paths_cannot_be_null() {
+        new CerberusConfigurationSource(vaultClient, (Set<String>)null );
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_constructor_validation_paths_cannot_be_empty() {
+        new CerberusConfigurationSource(vaultClient, Sets.<String>newHashSet());
     }
 
 }
