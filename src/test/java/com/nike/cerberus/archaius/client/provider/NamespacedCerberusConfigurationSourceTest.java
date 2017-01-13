@@ -100,7 +100,7 @@ public class NamespacedCerberusConfigurationSourceTest {
         assertThat(result.getComplete()).containsOnlyKeys(FOOBINATOR_CONFIG_NAMESPACED_KEY, ARTEMIS_CONFIG_NAMESPACED_KEY);
     }
 
-    @Test
+    @Test(expected = VaultServerException.class)
     public void poll_fails_to_read_path1_but_is_successful_on_path2() {
         // mock dependencies to ensure an error
         final VaultListResponse path1ListResponse = new VaultListResponse()
@@ -122,10 +122,5 @@ public class NamespacedCerberusConfigurationSourceTest {
 
         // call the method under test
         PollResult result = subject.poll(true, null);
-
-        // verify results
-        assertThat(result).isNotNull();
-        assertThat(result.getComplete()).isNotNull();
-        assertThat(result.getComplete()).containsOnlyKeys(ARTEMIS_CONFIG_NAMESPACED_KEY);
     }
 }

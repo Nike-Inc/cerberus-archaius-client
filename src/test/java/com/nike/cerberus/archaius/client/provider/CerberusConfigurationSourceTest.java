@@ -83,7 +83,7 @@ public class CerberusConfigurationSourceTest {
 
     }
 
-    @Test
+    @Test(expected = VaultServerException.class)
     public void poll_only_loads_data_for_path1() {
         // mock dependencies
         final Map<String, String> foobinatorMap = Maps.newHashMap();
@@ -94,13 +94,7 @@ public class CerberusConfigurationSourceTest {
         when(vaultClient.read(PATH_2)).thenThrow(new VaultServerException(500, Lists.newArrayList("Internal error.")));
 
         // call the method under test
-        PollResult result = subject.poll(true, null);
-
-        // verify results
-        assertThat(result).isNotNull();
-        assertThat(result.getComplete()).isNotNull();
-        assertThat(result.getComplete()).containsOnlyKeys(FOOBINATOR_CONFIG_KEY);
-
+        subject.poll(true, null);
     }
 
 }

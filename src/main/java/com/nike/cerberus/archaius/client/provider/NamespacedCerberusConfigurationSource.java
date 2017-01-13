@@ -115,22 +115,18 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
      */
     private Map<String, Object> buildEntriesMap(final String path) {
         final Map<String, Object> config = Maps.newHashMap();
-        try {
-            if (isFolder(path)) {
-                final VaultListResponse listResponse = getVaultClient().list(path);
-                for(final String subpath : listResponse.getKeys()) {
-                    final String fullPath = path + subpath;
-                    config.putAll(buildEntriesMap(fullPath));
-                }
-            } else {
-                final VaultResponse vaultResponse = getVaultClient().read(path);
-                final Map<String, String> dataFromVault = vaultResponse.getData();
-                for (final Map.Entry<String, String> pair : dataFromVault.entrySet()) {
-                    config.put(getPathPrefix(path) + pair.getKey(), pair.getValue());
-                }
+        if (isFolder(path)) {
+            final VaultListResponse listResponse = getVaultClient().list(path);
+            for(final String subpath : listResponse.getKeys()) {
+                final String fullPath = path + subpath;
+                config.putAll(buildEntriesMap(fullPath));
             }
-        } catch (final Exception e) {
-            logger.error("Exception loading properties from Cerberus, will not process changes from path, " + path, e);
+        } else {
+            final VaultResponse vaultResponse = getVaultClient().read(path);
+            final Map<String, String> dataFromVault = vaultResponse.getData();
+            for (final Map.Entry<String, String> pair : dataFromVault.entrySet()) {
+                config.put(getPathPrefix(path) + pair.getKey(), pair.getValue());
+            }
         }
         return config;
     }

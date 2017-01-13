@@ -62,16 +62,12 @@ public class CerberusConfigurationSource extends BaseCerberusConfigurationSource
      */
     @Override
     public PollResult poll(final boolean initial, final Object checkPoint) {
-
         final Map<String, Object> config = Maps.newHashMap();
         for (final String path : getPaths()) {
-            try {
-                final VaultResponse vaultResponse = getVaultClient().read(path);
-                config.putAll(vaultResponse.getData());
-            } catch (Exception e) {
-                logger.error("Exception loading properties from Cerberus, will not process changes from path "+path, e);
-            }
+            final VaultResponse vaultResponse = getVaultClient().read(path);
+            config.putAll(vaultResponse.getData());
         }
         return PollResult.createFull(config);
     }
+
 }
