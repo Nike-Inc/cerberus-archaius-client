@@ -67,6 +67,8 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
      */
     @Override
     public PollResult poll(final boolean initial, final Object checkPoint) {
+        logger.debug("poll() initial={}", initial);
+
         final Map<String, Object> config = Maps.newHashMap();
         for (final String path : getPaths()) {
             config.putAll(buildEntriesMap(path));

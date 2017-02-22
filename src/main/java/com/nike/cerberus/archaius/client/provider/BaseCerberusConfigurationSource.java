@@ -19,6 +19,8 @@ package com.nike.cerberus.archaius.client.provider;
 import com.google.common.collect.Sets;
 import com.netflix.config.PolledConfigurationSource;
 import com.nike.vault.client.VaultClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 
@@ -30,6 +32,8 @@ public abstract class BaseCerberusConfigurationSource implements PolledConfigura
     private final VaultClient vaultClient;
 
     private final Set<String> paths;
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Constructor that accepts a Set&lt;String&gt; for paths.
@@ -48,6 +52,7 @@ public abstract class BaseCerberusConfigurationSource implements PolledConfigura
         }
         this.vaultClient = vaultClient;
         this.paths = Sets.newHashSet(paths);
+        logger.info("paths={}",  getPaths());
     }
 
     /**
@@ -67,6 +72,7 @@ public abstract class BaseCerberusConfigurationSource implements PolledConfigura
         }
         this.vaultClient = vaultClient;
         this.paths = Sets.newHashSet(paths);
+        logger.info("paths={}", getPaths());
     }
 
     public VaultClient getVaultClient() {

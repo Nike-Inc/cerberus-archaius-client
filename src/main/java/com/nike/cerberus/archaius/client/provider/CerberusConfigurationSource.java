@@ -62,6 +62,8 @@ public class CerberusConfigurationSource extends BaseCerberusConfigurationSource
      */
     @Override
     public PollResult poll(final boolean initial, final Object checkPoint) {
+        logger.debug("poll() initial={}", initial);
+
         final Map<String, Object> config = Maps.newHashMap();
         for (final String path : getPaths()) {
             final VaultResponse vaultResponse = getVaultClient().read(path);
