@@ -32,6 +32,8 @@ public class ArchaiusCerberusClientFactory {
      * @return Vault client
      */
     public static VaultClient getClient() {
-        return VaultClientFactory.getClient(new ArchaiusCerberusUrlResolver(), new DefaultCerberusCredentialsProviderChain());
+        final ArchaiusCerberusUrlResolver archaiusUrlResolver = new ArchaiusCerberusUrlResolver();
+
+        return VaultClientFactory.getClient(archaiusUrlResolver, new DefaultCerberusCredentialsProviderChain(archaiusUrlResolver));
     }
 }
