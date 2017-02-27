@@ -71,6 +71,7 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
 
         final Map<String, Object> config = Maps.newHashMap();
         for (final String path : getPaths()) {
+            logger.debug("Reading vault path '{}'...", path);
             config.putAll(buildEntriesMap(path));
         }
         return PollResult.createFull(config);
