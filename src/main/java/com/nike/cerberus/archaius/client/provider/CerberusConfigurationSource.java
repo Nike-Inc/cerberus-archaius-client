@@ -66,6 +66,7 @@ public class CerberusConfigurationSource extends BaseCerberusConfigurationSource
 
         final Map<String, Object> config = Maps.newHashMap();
         for (final String path : getPaths()) {
+            logger.debug("poll: reading vault path '{}'...", path);
             final VaultResponse vaultResponse = getVaultClient().read(path);
             config.putAll(vaultResponse.getData());
         }
