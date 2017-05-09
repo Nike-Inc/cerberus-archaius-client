@@ -70,6 +70,7 @@ public class CerberusConfigurationSource extends BaseCerberusConfigurationSource
             final VaultResponse vaultResponse = getVaultClient().read(path);
             config.putAll(vaultResponse.getData());
         }
+        logger.info("poll() successfully read {} keys from Cerberus", config.size());
         return PollResult.createFull(config);
     }
 
