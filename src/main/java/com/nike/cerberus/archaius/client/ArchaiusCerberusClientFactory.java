@@ -20,6 +20,9 @@ import com.nike.cerberus.client.auth.DefaultCerberusCredentialsProviderChain;
 import com.nike.vault.client.VaultClient;
 import com.nike.vault.client.VaultClientFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Client factory for creating a Cerberus client with URL resolved using the ArchaiusCerberusUrlResolver
  */
@@ -34,6 +37,12 @@ public class ArchaiusCerberusClientFactory {
     public static VaultClient getClient() {
         final ArchaiusCerberusUrlResolver archaiusUrlResolver = new ArchaiusCerberusUrlResolver();
 
-        return VaultClientFactory.getClient(archaiusUrlResolver, new DefaultCerberusCredentialsProviderChain(archaiusUrlResolver));
+        final Map<String, String> defaultHeaders = new HashMap<>();
+        defaultHeaders.put(ClientVersion.CERBERUS_CLIENT_HEADER, ClientVersion.getVersion());
+
+        return VaultClientFactory.getClient(
+                archaiusUrlResolver,
+                new DefaultCerberusCredentialsProviderChain(archaiusUrlResolver),
+                defaultHeaders);
     }
 }
