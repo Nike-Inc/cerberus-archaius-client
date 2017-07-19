@@ -38,7 +38,7 @@ public class ArchaiusCerberusClientFactory {
         final ArchaiusCerberusUrlResolver archaiusUrlResolver = new ArchaiusCerberusUrlResolver();
 
         final Map<String, String> defaultHeaders = new HashMap<>();
-        defaultHeaders.put(ClientVersion.CERBERUS_CLIENT_HEADER, ClientVersion.getVersion());
+        defaultHeaders.put(ClientVersion.CERBERUS_CLIENT_HEADER, ClientVersion.getClientHeaderValue());
 
         return VaultClientFactory.getClient(
                 archaiusUrlResolver,
