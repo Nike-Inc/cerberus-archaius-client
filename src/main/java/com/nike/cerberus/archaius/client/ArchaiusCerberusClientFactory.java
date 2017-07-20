@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Nike, Inc.
+ * Copyright (c) 2017 Nike, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +38,14 @@ public class ArchaiusCerberusClientFactory {
         final ArchaiusCerberusUrlResolver archaiusUrlResolver = new ArchaiusCerberusUrlResolver();
 
         final Map<String, String> defaultHeaders = new HashMap<>();
-        defaultHeaders.put(ClientVersion.CERBERUS_CLIENT_HEADER, ClientVersion.getClientHeaderValue());
+        final String xCerberusClientHeaderValue = ClientVersion.getClientHeaderValue();
+        defaultHeaders.put(ClientVersion.CERBERUS_CLIENT_HEADER, xCerberusClientHeaderValue);
 
         return VaultClientFactory.getClient(
                 archaiusUrlResolver,
-                new DefaultCerberusCredentialsProviderChain(archaiusUrlResolver),
+                // pass the client HTTP header value to be used in authenticate calls to Cerberus
+                new DefaultCerberusCredentialsProviderChain(archaiusUrlResolver, xCerberusClientHeaderValue),
+                // pass the client header to be used in all other calls to Cerberus (e.g. read, write, etc.)
                 defaultHeaders);
     }
 }

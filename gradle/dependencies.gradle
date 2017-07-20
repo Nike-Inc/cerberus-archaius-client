@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Nike, Inc.
+ * Copyright (c) 2017 Nike, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     compile 'com.netflix.archaius:archaius-aws:0.6.5'
-    compile 'com.nike:cerberus-client:2.4.0'
+    compile 'com.nike:cerberus-client:3.0.0'
 
     compile "org.apache.commons:commons-lang3:3.5"
     compile "com.squareup.okhttp3:okhttp:3.7.0"
