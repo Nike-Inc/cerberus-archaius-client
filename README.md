@@ -48,8 +48,10 @@ Using this pattern, the properties stored in Cerberus will treated as just anoth
 existing sources like property files. All properties can then be accessed using the 
 DynamicPropertyFactory.getInstance().getXXX methods. This can be achieve with either nonpolling or polling configuration.
 
-##### Nonpolling configuration
+##### Nonpolling configuration (Recommended)
 
+Most applications do not need to poll Cerberus for changes.  If secrets change, the instances can simply be restarted
+or redeployed to pick up new values.
 The code shown below is a sample implementation of AbstractModule that instantiates a ConcurrentMapConfiguration and 
 adds it to the existing ConfigurationManager.
 
@@ -108,6 +110,8 @@ adds it to the existing ConfigurationManager.
 
 ##### Polling configuration
 
+Polling allows an application to pick up changes dynamically at runtime.  Usually this is not needed because simply
+restarting or redeploying is good enough for most applications.
 The code shown below is a sample implementation of AbstractModule that instantiates a PolledConfigurationSource and 
 adds it to the existing ConfigurationManager.
 
