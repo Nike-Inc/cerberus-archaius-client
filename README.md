@@ -71,7 +71,7 @@ adds it to the existing ConfigurationManager.
                     .get();
     
             /*
-             * So long as we've got a path, let's configure the polling of config from Cerberus into Archaius.
+             * So long as we've got a path, let's pull the config into Archaius from Cerberus.
              */
             if (vaultPath != null && !vaultPath.isEmpty()) {
                 logger.info("Adding Cerberus as Configuration source. Vault Path = " + vaultPath);
