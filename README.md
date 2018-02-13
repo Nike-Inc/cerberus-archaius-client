@@ -46,8 +46,72 @@ chances for property name collision in Archaius.
 
 Using this pattern, the properties stored in Cerberus will treated as just another set of properties in addition to 
 existing sources like property files. All properties can then be accessed using the 
-DynamicPropertyFactory.getInstance().getXXX methods.
+DynamicPropertyFactory.getInstance().getXXX methods. This can be achieve with either nonpolling or polling configuration.
 
+##### Nonpolling configuration (Recommended)
+
+Most applications do not need to poll Cerberus for changes.  If secrets change, the instances can simply be restarted
+or redeployed to pick up new values.
+The code shown below is a sample implementation of AbstractModule that instantiates a ConcurrentMapConfiguration and 
+adds it to the existing ConfigurationManager.
+
+``` java
+    public class CerberusArchaiusModule extends AbstractModule {
+        private final Logger logger = LoggerFactory.getLogger(getClass());
+    
+        private static final String SECRETS_PATH_PROP_NAME = "cerberus.config.path";
+        private static final String SECRETS_DEFAULT_VAULT_PATH = "app/cerberus-demo/config";
+    
+        @Override
+        protected void configure() {
+            /*
+             * First let's look up the path for where to read in Cerberus.
+             * This examples show us attempting to source it from an Archaius property, but defaulting if not found.
+             */
+            final String vaultPath = DynamicPropertyFactory.getInstance()
+                    .getStringProperty(SECRETS_PATH_PROP_NAME, SECRETS_DEFAULT_VAULT_PATH)
+                    .get();
+    
+            /*
+             * So long as we've got a path, let's pull the config into Archaius from Cerberus.
+             */
+            if (vaultPath != null && !vaultPath.isEmpty()) {
+                logger.info("Adding Cerberus as Configuration source. Vault Path = " + vaultPath);
+    
+                /*
+                 * Create a configuration source passing in a Cerberus client using the ArchaiusCerberusClientFactory and
+                 * the path we looked up above.  This factory will attempt to resolve cerberus configuration detailts,
+                 * like the URL and token from Archaius properties.
+                 */
+                final NamespacedCerberusConfigurationSource namespacedCerberusConfigurationSource = new NamespacedCerberusConfigurationSource(
+                        ArchaiusCerberusClientFactory.getClient(), vaultPath);
+                      
+                /*
+                 * Read secrets from Cerberus.
+                 */
+                AbstractConfiguration cerberusConfig = null;
+                try {
+                     cerberusConfig = namespacedCerberusConfigurationSource.getConfig();
+                } catch (Exception e) {
+                    throw new RuntimeException("Unable to read secrets from Cerberus", e);
+                }
+    
+                final ConcurrentCompositeConfiguration configInstance = (ConcurrentCompositeConfiguration) ConfigurationManager
+                        .getConfigInstance();
+    
+                configInstance.addConfiguration(cerberusConfig);
+            } else {
+                logger.info("Property corresponding to the Vault path for secrets not found! "
+                        + "Cerberus not added as Configuration source");
+            }
+        }
+    }
+```
+
+##### Polling configuration
+
+Polling allows an application to pick up changes dynamically at runtime.  Usually this is not needed because simply
+restarting or redeploying is good enough for most applications.
 The code shown below is a sample implementation of AbstractModule that instantiates a PolledConfigurationSource and 
 adds it to the existing ConfigurationManager.
 
@@ -108,7 +172,7 @@ adds it to the existing ConfigurationManager.
     }
 ```
 
-#### Use a DynamicConfiguration object
+##### Use a DynamicConfiguration object
 
 With this pattern, the ConfigurationManager instance that exists is not modified in any way, and the
 properties stored in Cerberus are read using the cerberusConfig.getXXX methods. This might be useful in cases where the
@@ -167,7 +231,7 @@ The code snippet shown below is an example of how this can be done.
                  */
                 bind(DynamicConfiguration.class)
                         .annotatedWith(Names.named("cerberus.config"))
-                        .to(cerberusConfig);
+                        .toInstance(cerberusConfig);
             } else {
                 logger.info("Property corresponding to the Vault path for secrets not found! "
                         + "Cerberus not added as Configuration source");

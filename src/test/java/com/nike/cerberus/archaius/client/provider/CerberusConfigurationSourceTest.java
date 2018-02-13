@@ -23,6 +23,7 @@ import com.netflix.config.PollResult;
 import com.nike.vault.client.VaultClient;
 import com.nike.vault.client.VaultServerException;
 import com.nike.vault.client.model.VaultResponse;
+import org.apache.commons.configuration.AbstractConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -83,6 +84,11 @@ public class CerberusConfigurationSourceTest {
         assertThat(result.getComplete()).isNotNull();
         assertThat(result.getComplete()).containsOnlyKeys(FOOBINATOR_CONFIG_KEY, ARTEMIS_CONFIG_KEY);
 
+        AbstractConfiguration config = subject.getConfig();
+        assertThat(config).isNotNull();
+        assertThat(config.getKeys()).containsOnly(FOOBINATOR_CONFIG_KEY, ARTEMIS_CONFIG_KEY);
+        assertThat(config.getString(ARTEMIS_CONFIG_KEY)).isEqualTo(ARTEMIS_CONFIG_VALUE);
+        assertThat(config.getString(FOOBINATOR_CONFIG_KEY)).isEqualTo(FOOBINATOR_CONFIG_VALUE);
     }
 
     @Test(expected = VaultServerException.class)
