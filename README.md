@@ -83,15 +83,15 @@ adds it to the existing ConfigurationManager.
                  * the path we looked up above.  This factory will attempt to resolve cerberus configuration detailts,
                  * like the URL and token from Archaius properties.
                  */
-                final PolledConfigurationSource polledConfigurationSource = new NamespacedCerberusConfigurationSource(
+                final NamespacedCerberusConfigurationSource namespacedCerberusConfigurationSource = new NamespacedCerberusConfigurationSource(
                         ArchaiusCerberusClientFactory.getClient(), vaultPath);
                       
                 /*
-                 * Read secrets from Cerberus. Poll Cerberus once.
+                 * Read secrets from Cerberus.
                  */
-                PollResult pollResult = null;
+                AbstractConfiguration cerberusConfig = null;
                 try {
-                     pollResult = polledConfigurationSource.poll(true, null);
+                     cerberusConfig = namespacedCerberusConfigurationSource.getConfig();
                 } catch (Exception e) {
                     throw new RuntimeException("Unable to read secrets from Cerberus", e);
                 }
@@ -99,7 +99,7 @@ adds it to the existing ConfigurationManager.
                 final ConcurrentCompositeConfiguration configInstance = (ConcurrentCompositeConfiguration) ConfigurationManager
                         .getConfigInstance();
     
-                configInstance.addConfiguration(new ConcurrentMapConfiguration(pollResult.getComplete());
+                configInstance.addConfiguration(cerberusConfig);
             } else {
                 logger.info("Property corresponding to the Vault path for secrets not found! "
                         + "Cerberus not added as Configuration source");

@@ -17,10 +17,12 @@
 package com.nike.cerberus.archaius.client.provider;
 
 import com.google.common.collect.Maps;
+import com.netflix.config.ConcurrentMapConfiguration;
 import com.netflix.config.PollResult;
 import com.netflix.config.PolledConfigurationSource;
 import com.nike.vault.client.VaultClient;
 import com.nike.vault.client.model.VaultResponse;
+import org.apache.commons.configuration.AbstractConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,15 +65,26 @@ public class CerberusConfigurationSource extends BaseCerberusConfigurationSource
     @Override
     public PollResult poll(final boolean initial, final Object checkPoint) {
         logger.debug("poll() initial={}", initial);
+        final Map<String, Object> config = getMap();
+        logger.info("poll() successfully read {} keys from Cerberus", config.size());
+        return PollResult.createFull(getMap());
+    }
 
+    /**
+     * Returns config pulled from Cerberus, keyed exactly the same way they are in Cerberus.
+     * @return Cerberus config
+     */
+    public AbstractConfiguration getConfig(){
+        return new ConcurrentMapConfiguration(getMap());
+    }
+
+    private Map<String, Object> getMap() {
         final Map<String, Object> config = Maps.newHashMap();
         for (final String path : getPaths()) {
             logger.debug("poll: reading vault path '{}'...", path);
             final VaultResponse vaultResponse = getVaultClient().read(path);
             config.putAll(vaultResponse.getData());
         }
-        logger.info("poll() successfully read {} keys from Cerberus", config.size());
-        return PollResult.createFull(config);
+        return config;
     }
-
 }

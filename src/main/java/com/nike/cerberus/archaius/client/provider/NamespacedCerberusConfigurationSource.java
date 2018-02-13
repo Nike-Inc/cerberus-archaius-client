@@ -17,11 +17,13 @@
 package com.nike.cerberus.archaius.client.provider;
 
 import com.google.common.collect.Maps;
+import com.netflix.config.ConcurrentMapConfiguration;
 import com.netflix.config.PollResult;
 import com.netflix.config.PolledConfigurationSource;
 import com.nike.vault.client.VaultClient;
 import com.nike.vault.client.model.VaultListResponse;
 import com.nike.vault.client.model.VaultResponse;
+import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,12 +71,16 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
     public PollResult poll(final boolean initial, final Object checkPoint) {
         logger.debug("poll() initial={}", initial);
 
-        final Map<String, Object> config = Maps.newHashMap();
-        for (final String path : getPaths()) {
-            logger.debug("poll: reading vault path '{}'...", path);
-            config.putAll(buildEntriesMap(path));
-        }
+        final Map<String, Object> config = getMap();
         return PollResult.createFull(config);
+    }
+
+    /**
+     * Returns config pulled from Cerberus, keyed using the full path to the property.
+     * @return Cerberus config
+     */
+    public AbstractConfiguration getConfig() {
+        return new ConcurrentMapConfiguration(getMap());
     }
 
     /**
@@ -130,6 +136,15 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
             for (final Map.Entry<String, String> pair : dataFromVault.entrySet()) {
                 config.put(getPathPrefix(path) + pair.getKey(), pair.getValue());
             }
+        }
+        return config;
+    }
+
+    private Map<String, Object> getMap() {
+        final Map<String, Object> config = Maps.newHashMap();
+        for (final String path : getPaths()) {
+            logger.debug("poll: reading vault path '{}'...", path);
+            config.putAll(buildEntriesMap(path));
         }
         return config;
     }
