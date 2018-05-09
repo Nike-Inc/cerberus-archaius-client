@@ -17,10 +17,10 @@
 package com.nike.cerberus.archaius.client.provider;
 
 import com.netflix.config.PollResult;
-import com.nike.vault.client.VaultClient;
-import com.nike.vault.client.VaultServerException;
-import com.nike.vault.client.model.VaultListResponse;
-import com.nike.vault.client.model.VaultResponse;
+import com.nike.cerberus.client.CerberusClient;
+import com.nike.cerberus.client.CerberusServerException;
+import com.nike.cerberus.client.model.CerberusListResponse;
+import com.nike.cerberus.client.model.CerberusResponse;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +40,7 @@ public class NamespacedCerberusConfigurationSourceTest {
 
     private NamespacedCerberusConfigurationSource subject;
 
-    private VaultClient vaultClient;
+    private CerberusClient cerberusClient;
 
     private static final String PATH_1 = "app/foobinator/";
 
@@ -66,31 +66,31 @@ public class NamespacedCerberusConfigurationSourceTest {
 
     @Before
     public void setup(){
-        vaultClient = mock(VaultClient.class);
-        subject = new NamespacedCerberusConfigurationSource(vaultClient, PATH_1, PATH_2);
+        cerberusClient = mock(CerberusClient.class);
+        subject = new NamespacedCerberusConfigurationSource(cerberusClient, PATH_1, PATH_2);
     }
 
     @Test
     public void poll_successfully_reads_all_paths() {
         // mock dependencies
-        final VaultListResponse path1ListResponse = new VaultListResponse()
+        final CerberusListResponse path1ListResponse = new CerberusListResponse()
                 .setKeys(Collections.singletonList(PATH_1_SUBPATH_1));
-        when(vaultClient.list(PATH_1)).thenReturn(path1ListResponse);
+        when(cerberusClient.list(PATH_1)).thenReturn(path1ListResponse);
         final Map<String, String> path1Map = new HashMap<>();
         path1Map.put(FOOBINATOR_CONFIG_KEY, FOOBINATOR_CONFIG_VALUE);
-        final VaultResponse path1Response = new VaultResponse().setData(path1Map);
-        when(vaultClient.read(PATH_1 + PATH_1_SUBPATH_1)).thenReturn(path1Response);
+        final CerberusResponse path1Response = new CerberusResponse().setData(path1Map);
+        when(cerberusClient.read(PATH_1 + PATH_1_SUBPATH_1)).thenReturn(path1Response);
 
-        final VaultListResponse path2FirstListResponse = new VaultListResponse()
+        final CerberusListResponse path2FirstListResponse = new CerberusListResponse()
                 .setKeys(Collections.singletonList(PATH_2_SUBPATH_1));
-        when(vaultClient.list(PATH_2)).thenReturn(path2FirstListResponse);
-        final VaultListResponse path2SecondListResponse = new VaultListResponse()
+        when(cerberusClient.list(PATH_2)).thenReturn(path2FirstListResponse);
+        final CerberusListResponse path2SecondListResponse = new CerberusListResponse()
                 .setKeys(Collections.singletonList(PATH_2_SUBPATH_2));
-        when(vaultClient.list(PATH_2 + PATH_2_SUBPATH_1)).thenReturn(path2SecondListResponse);
+        when(cerberusClient.list(PATH_2 + PATH_2_SUBPATH_1)).thenReturn(path2SecondListResponse);
         final Map<String, String> path2Map = new HashMap<>();
         path2Map.put(ARTEMIS_CONFIG_KEY, ARTEMIS_CONFIG_VALUE);
-        final VaultResponse path2Response = new VaultResponse().setData(path2Map);
-        when(vaultClient.read(PATH_2 + PATH_2_SUBPATH_1 + PATH_2_SUBPATH_2)).thenReturn(path2Response);
+        final CerberusResponse path2Response = new CerberusResponse().setData(path2Map);
+        when(cerberusClient.read(PATH_2 + PATH_2_SUBPATH_1 + PATH_2_SUBPATH_2)).thenReturn(path2Response);
 
         // call the method under test
         PollResult result = subject.poll(true, null);
@@ -107,25 +107,25 @@ public class NamespacedCerberusConfigurationSourceTest {
         assertThat(config.getString(FOOBINATOR_CONFIG_NAMESPACED_KEY)).isEqualTo(FOOBINATOR_CONFIG_VALUE);
     }
 
-    @Test(expected = VaultServerException.class)
+    @Test(expected = CerberusServerException.class)
     public void poll_fails_to_read_path1_but_is_successful_on_path2() {
         // mock dependencies to ensure an error
-        final VaultListResponse path1ListResponse = new VaultListResponse()
+        final CerberusListResponse path1ListResponse = new CerberusListResponse()
                 .setKeys(Collections.singletonList(PATH_1_SUBPATH_1));
-        when(vaultClient.list(PATH_1)).thenReturn(path1ListResponse);
-        when(vaultClient.read(PATH_1 + PATH_1_SUBPATH_1))
-                .thenThrow(new VaultServerException(500, Collections.singletonList("Internal error.")));
+        when(cerberusClient.list(PATH_1)).thenReturn(path1ListResponse);
+        when(cerberusClient.read(PATH_1 + PATH_1_SUBPATH_1))
+                .thenThrow(new CerberusServerException(500, Collections.singletonList("Internal error.")));
 
-        final VaultListResponse path2FirstListResponse = new VaultListResponse()
+        final CerberusListResponse path2FirstListResponse = new CerberusListResponse()
                 .setKeys(Collections.singletonList(PATH_2_SUBPATH_1));
-        when(vaultClient.list(PATH_2)).thenReturn(path2FirstListResponse);
-        final VaultListResponse path2SecondListResponse = new VaultListResponse()
+        when(cerberusClient.list(PATH_2)).thenReturn(path2FirstListResponse);
+        final CerberusListResponse path2SecondListResponse = new CerberusListResponse()
                 .setKeys(Collections.singletonList(PATH_2_SUBPATH_2));
-        when(vaultClient.list(PATH_2 + PATH_2_SUBPATH_1)).thenReturn(path2SecondListResponse);
+        when(cerberusClient.list(PATH_2 + PATH_2_SUBPATH_1)).thenReturn(path2SecondListResponse);
         final Map<String, String> path2Map = new HashMap<>();
         path2Map.put(ARTEMIS_CONFIG_KEY, ARTEMIS_CONFIG_VALUE);
-        final VaultResponse path2Response = new VaultResponse().setData(path2Map);
-        when(vaultClient.read(PATH_2 + PATH_2_SUBPATH_1 + PATH_2_SUBPATH_2)).thenReturn(path2Response);
+        final CerberusResponse path2Response = new CerberusResponse().setData(path2Map);
+        when(cerberusClient.read(PATH_2 + PATH_2_SUBPATH_1 + PATH_2_SUBPATH_2)).thenReturn(path2Response);
 
         // call the method under test
         PollResult result = subject.poll(true, null);

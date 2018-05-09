@@ -17,8 +17,8 @@
 package com.nike.cerberus.archaius.client;
 
 import com.nike.cerberus.client.auth.DefaultCerberusCredentialsProviderChain;
-import com.nike.vault.client.VaultClient;
-import com.nike.vault.client.VaultClientFactory;
+import com.nike.cerberus.client.CerberusClient;
+import com.nike.cerberus.client.CerberusClientFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,19 +29,19 @@ import java.util.Map;
 public class ArchaiusCerberusClientFactory {
 
     /**
-     * Resolves the Vault/Cerberus URL via the {@link ArchaiusCerberusUrlResolver} and creates a new {@link VaultClient}
+     * Resolves the Cerberus/Cerberus URL via the {@link ArchaiusCerberusUrlResolver} and creates a new {@link CerberusClient}
      * with the {@link DefaultCerberusCredentialsProviderChain}.
      *
-     * @return Vault client
+     * @return Cerberus client
      */
-    public static VaultClient getClient() {
+    public static CerberusClient getClient() {
         final ArchaiusCerberusUrlResolver archaiusUrlResolver = new ArchaiusCerberusUrlResolver();
 
         final Map<String, String> defaultHeaders = new HashMap<>();
         final String xCerberusClientHeaderValue = ClientVersion.getClientHeaderValue();
         defaultHeaders.put(ClientVersion.CERBERUS_CLIENT_HEADER, xCerberusClientHeaderValue);
 
-        return VaultClientFactory.getClient(
+        return CerberusClientFactory.getClient(
                 archaiusUrlResolver,
                 // pass the client HTTP header value to be used in authenticate calls to Cerberus
                 new DefaultCerberusCredentialsProviderChain(archaiusUrlResolver, xCerberusClientHeaderValue),

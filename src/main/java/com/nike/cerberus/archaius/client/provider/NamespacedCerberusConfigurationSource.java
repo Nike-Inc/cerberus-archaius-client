@@ -20,9 +20,9 @@ import com.google.common.collect.Maps;
 import com.netflix.config.ConcurrentMapConfiguration;
 import com.netflix.config.PollResult;
 import com.netflix.config.PolledConfigurationSource;
-import com.nike.vault.client.VaultClient;
-import com.nike.vault.client.model.VaultListResponse;
-import com.nike.vault.client.model.VaultResponse;
+import com.nike.cerberus.client.CerberusClient;
+import com.nike.cerberus.client.model.CerberusListResponse;
+import com.nike.cerberus.client.model.CerberusResponse;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -46,22 +46,22 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
 
     /**
      * Constructor that accepts a Set&lt;String&gt; for paths
-     * @param vaultClient An already configured vault client.  May not be null.
-     * @param paths Set containing vault paths where configuration is stored.  May not be null.
-     * @throws IllegalArgumentException if vaultClient is null or if paths is null/empty
+     * @param cerberusClient An already configured cerberus client.  May not be null.
+     * @param paths Set containing cerberus paths where configuration is stored.  May not be null.
+     * @throws IllegalArgumentException if cerberusClient is null or if paths is null/empty
      */
-    public NamespacedCerberusConfigurationSource(final VaultClient vaultClient, final Set<String> paths) {
-        super(vaultClient, paths);
+    public NamespacedCerberusConfigurationSource(final CerberusClient cerberusClient, final Set<String> paths) {
+        super(cerberusClient, paths);
     }
 
     /**
      * Constructor that accepts var args for paths
-     * @param vaultClient An already configured vault client.  May not be null.
-     * @param paths One or more vault paths where configuration is stored.  May not be null.
-     * @throws IllegalArgumentException If vaultClient is null or if paths is null/empty
+     * @param cerberusClient An already configured cerberus client.  May not be null.
+     * @param paths One or more cerberus paths where configuration is stored.  May not be null.
+     * @throws IllegalArgumentException If cerberusClient is null or if paths is null/empty
      */
-    public NamespacedCerberusConfigurationSource(final VaultClient vaultClient, final String... paths) {
-        super(vaultClient, paths);
+    public NamespacedCerberusConfigurationSource(final CerberusClient cerberusClient, final String... paths) {
+        super(cerberusClient, paths);
     }
 
     /**
@@ -84,13 +84,13 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
     }
 
     /**
-     * Returns true if a path meets the definition of a folder according to vault's convention (e.g. path ends with a
+     * Returns true if a path meets the definition of a folder according to cerberus's convention (e.g. path ends with a
      * forward slash).
      *
-     * See https://www.vaultproject.io/docs/secrets/generic/index.html under the List API documentation for details as
-     * to Vault's convention
+     * See https://www.cerberusproject.io/docs/secrets/generic/index.html under the List API documentation for details as
+     * to Cerberus's convention
      *
-     * @param path - The vault path we are checking to determine if it is a folder or a leaf.
+     * @param path - The cerberus path we are checking to determine if it is a folder or a leaf.
      * @return A boolean value, true if the path is a folder.
      */
     private boolean isFolder(final String path) {
@@ -116,7 +116,7 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
     }
 
     /**
-     * Traverses the vault path from the provided path down through it's leaves. Places all properties into the map that
+     * Traverses the cerberus path from the provided path down through it's leaves. Places all properties into the map that
      * will be used to populate the Archaius configuration.
      *
      * @param path - The parent path, all properties under this path will be populated.
@@ -125,15 +125,15 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
     private Map<String, Object> buildEntriesMap(final String path) {
         final Map<String, Object> config = Maps.newHashMap();
         if (isFolder(path)) {
-            final VaultListResponse listResponse = getVaultClient().list(path);
+            final CerberusListResponse listResponse = getCerberusClient().list(path);
             for(final String subpath : listResponse.getKeys()) {
                 final String fullPath = path + subpath;
                 config.putAll(buildEntriesMap(fullPath));
             }
         } else {
-            final VaultResponse vaultResponse = getVaultClient().read(path);
-            final Map<String, String> dataFromVault = vaultResponse.getData();
-            for (final Map.Entry<String, String> pair : dataFromVault.entrySet()) {
+            final CerberusResponse cerberusResponse = getCerberusClient().read(path);
+            final Map<String, String> dataFromCerberus = cerberusResponse.getData();
+            for (final Map.Entry<String, String> pair : dataFromCerberus.entrySet()) {
                 config.put(getPathPrefix(path) + pair.getKey(), pair.getValue());
             }
         }
@@ -143,7 +143,7 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
     private Map<String, Object> getMap() {
         final Map<String, Object> config = Maps.newHashMap();
         for (final String path : getPaths()) {
-            logger.debug("poll: reading vault path '{}'...", path);
+            logger.debug("poll: reading cerberus path '{}'...", path);
             config.putAll(buildEntriesMap(path));
         }
         return config;
