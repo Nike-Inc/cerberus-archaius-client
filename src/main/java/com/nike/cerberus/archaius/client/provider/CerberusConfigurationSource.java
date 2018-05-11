@@ -20,8 +20,8 @@ import com.google.common.collect.Maps;
 import com.netflix.config.ConcurrentMapConfiguration;
 import com.netflix.config.PollResult;
 import com.netflix.config.PolledConfigurationSource;
-import com.nike.vault.client.VaultClient;
-import com.nike.vault.client.model.VaultResponse;
+import com.nike.cerberus.client.CerberusClient;
+import com.nike.cerberus.client.model.CerberusResponse;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,23 +40,23 @@ public class CerberusConfigurationSource extends BaseCerberusConfigurationSource
     /**
      * Constructor that accepts a Set&lt;String&gt; for paths.
      *
-     * @param vaultClient Instance of {@link VaultClient}
-     * @param paths Set&lt;String&gt; containing vault paths where configuration is stored
-     * @throws IllegalArgumentException if vaultClient is null or if paths is null/empty
+     * @param cerberusClient Instance of {@link CerberusClient}
+     * @param paths Set&lt;String&gt; containing cerberus paths where configuration is stored
+     * @throws IllegalArgumentException if cerberusClient is null or if paths is null/empty
      */
-    public CerberusConfigurationSource(final VaultClient vaultClient, final Set<String> paths) {
-        super(vaultClient, paths);
+    public CerberusConfigurationSource(final CerberusClient cerberusClient, final Set<String> paths) {
+        super(cerberusClient, paths);
     }
 
     /**
      * Constructor that accepts var args for paths.
      *
-     * @param vaultClient Instance of {@link VaultClient}
-     * @param paths one or more vault paths where configuration is stored
-     * @throws IllegalArgumentException if vaultClient is null or if paths is null/empty
+     * @param cerberusClient Instance of {@link CerberusClient}
+     * @param paths one or more cerberus paths where configuration is stored
+     * @throws IllegalArgumentException if cerberusClient is null or if paths is null/empty
      */
-    public CerberusConfigurationSource(final VaultClient vaultClient, final String... paths) {
-        super(vaultClient, paths);
+    public CerberusConfigurationSource(final CerberusClient cerberusClient, final String... paths) {
+        super(cerberusClient, paths);
     }
 
     /**
@@ -81,9 +81,9 @@ public class CerberusConfigurationSource extends BaseCerberusConfigurationSource
     private Map<String, Object> getMap() {
         final Map<String, Object> config = Maps.newHashMap();
         for (final String path : getPaths()) {
-            logger.debug("poll: reading vault path '{}'...", path);
-            final VaultResponse vaultResponse = getVaultClient().read(path);
-            config.putAll(vaultResponse.getData());
+            logger.debug("poll: reading cerberus path '{}'...", path);
+            final CerberusResponse cerberusResponse = getCerberusClient().read(path);
+            config.putAll(cerberusResponse.getData());
         }
         return config;
     }

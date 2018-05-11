@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.netflix.config.ConfigurationManager;
-import com.nike.vault.client.UrlResolver;
+import com.nike.cerberus.client.UrlResolver;
 
 /**
  * Class for resolving the Cerberus URL via Archaius.
@@ -40,9 +40,9 @@ public class ArchaiusCerberusUrlResolver implements UrlResolver {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
-     * Attempts to acquire the Vault URL from Archaius.
+     * Attempts to acquire the Cerberus URL from Archaius.
      *
-     * @return Vault URL
+     * @return Cerberus URL
      */
     @Nullable
     @Override

@@ -60,7 +60,7 @@ adds it to the existing ConfigurationManager.
         private final Logger logger = LoggerFactory.getLogger(getClass());
     
         private static final String SECRETS_PATH_PROP_NAME = "cerberus.config.path";
-        private static final String SECRETS_DEFAULT_VAULT_PATH = "app/cerberus-demo/config";
+        private static final String SECRETS_DEFAULT_CERBERUS_PATH = "app/cerberus-demo/config";
     
         @Override
         protected void configure() {
@@ -68,15 +68,15 @@ adds it to the existing ConfigurationManager.
              * First let's look up the path for where to read in Cerberus.
              * This examples show us attempting to source it from an Archaius property, but defaulting if not found.
              */
-            final String vaultPath = DynamicPropertyFactory.getInstance()
-                    .getStringProperty(SECRETS_PATH_PROP_NAME, SECRETS_DEFAULT_VAULT_PATH)
+            final String cerberusPath = DynamicPropertyFactory.getInstance()
+                    .getStringProperty(SECRETS_PATH_PROP_NAME, SECRETS_DEFAULT_CERBERUS_PATH)
                     .get();
     
             /*
              * So long as we've got a path, let's pull the config into Archaius from Cerberus.
              */
-            if (vaultPath != null && !vaultPath.isEmpty()) {
-                logger.info("Adding Cerberus as Configuration source. Vault Path = " + vaultPath);
+            if (cerberusPath != null && !cerberusPath.isEmpty()) {
+                logger.info("Adding Cerberus as Configuration source. Cerberus Path = " + cerberusPath);
     
                 /*
                  * Create a configuration source passing in a Cerberus client using the ArchaiusCerberusClientFactory and
@@ -84,7 +84,7 @@ adds it to the existing ConfigurationManager.
                  * like the URL and token from Archaius properties.
                  */
                 final NamespacedCerberusConfigurationSource namespacedCerberusConfigurationSource = new NamespacedCerberusConfigurationSource(
-                        ArchaiusCerberusClientFactory.getClient(), vaultPath);
+                        ArchaiusCerberusClientFactory.getClient(), cerberusPath);
                       
                 /*
                  * Read secrets from Cerberus.
@@ -101,7 +101,7 @@ adds it to the existing ConfigurationManager.
     
                 configInstance.addConfiguration(cerberusConfig);
             } else {
-                logger.info("Property corresponding to the Vault path for secrets not found! "
+                logger.info("Property corresponding to the Cerberus path for secrets not found! "
                         + "Cerberus not added as Configuration source");
             }
         }
@@ -122,7 +122,7 @@ adds it to the existing ConfigurationManager.
         private static final int POLL_INIT_DELAY = 1000;
         private static final int SECRETS_POLL_INTERVAL = (int) TimeUnit.HOURS.toMillis(1);
         private static final String SECRETS_PATH_PROP_NAME = "cerberus.config.path";
-        private static final String SECRETS_DEFAULT_VAULT_PATH = "app/cerberus-demo/config";
+        private static final String SECRETS_DEFAULT_CERBERUS_PATH = "app/cerberus-demo/config";
     
         @Override
         protected void configure() {
@@ -130,15 +130,15 @@ adds it to the existing ConfigurationManager.
              * First let's look up the path for where to read in Cerberus.
              * This examples show us attempting to source it from an Archaius property, but defaulting if not found.
              */
-            final String vaultPath = DynamicPropertyFactory.getInstance()
-                    .getStringProperty(SECRETS_PATH_PROP_NAME, SECRETS_DEFAULT_VAULT_PATH)
+            final String cerberusPath = DynamicPropertyFactory.getInstance()
+                    .getStringProperty(SECRETS_PATH_PROP_NAME, SECRETS_DEFAULT_CERBERUS_PATH)
                     .get();
     
             /*
              * So long as we've got a path, let's configure the polling of config from Cerberus into Archaius.
              */
-            if (vaultPath != null && !vaultPath.isEmpty()) {
-                logger.info("Adding Cerberus as Configuration source. Vault Path = " + vaultPath);
+            if (cerberusPath != null && !cerberusPath.isEmpty()) {
+                logger.info("Adding Cerberus as Configuration source. Cerberus Path = " + cerberusPath);
     
                 /*
                  * Create a configuration source passing in a Cerberus client using the ArchaiusCerberusClientFactory and
@@ -146,7 +146,7 @@ adds it to the existing ConfigurationManager.
                  * like the URL and token from Archaius properties.
                  */
                 final PolledConfigurationSource polledConfigurationSource = new NamespacedCerberusConfigurationSource(
-                        ArchaiusCerberusClientFactory.getClient(), vaultPath);
+                        ArchaiusCerberusClientFactory.getClient(), cerberusPath);
     
                 /*
                  * Setup the scheduler for how often this configuration source should be refreshed.
@@ -165,7 +165,7 @@ adds it to the existing ConfigurationManager.
     
                 configInstance.addConfiguration(cerberusConfig);
             } else {
-                logger.info("Property corresponding to the Vault path for secrets not found! "
+                logger.info("Property corresponding to the Cerberus path for secrets not found! "
                         + "Cerberus not added as Configuration source");
             }
         }
@@ -188,7 +188,7 @@ The code snippet shown below is an example of how this can be done.
         private static final int POLL_INIT_DELAY = 1000;
         private static final int SECRETS_POLL_INTERVAL = (int) TimeUnit.HOURS.toMillis(1);
         private static final String SECRETS_PATH_PROP_NAME = "cerberus.config.path";
-        private static final String SECRETS_DEFAULT_VAULT_PATH = "app/cerberus-demo/config";
+        private static final String SECRETS_DEFAULT_CERBERUS_PATH = "app/cerberus-demo/config";
     
         @Override
         protected void configure() {
@@ -196,15 +196,15 @@ The code snippet shown below is an example of how this can be done.
              * First let's look up the path for where to read in Cerberus.
              * This examples show us attempting to source it from an Archaius property, but defaulting if not found.
              */
-            final String vaultPath = DynamicPropertyFactory.getInstance()
-                    .getStringProperty(SECRETS_PATH_PROP_NAME, SECRETS_DEFAULT_VAULT_PATH)
+            final String cerberusPath = DynamicPropertyFactory.getInstance()
+                    .getStringProperty(SECRETS_PATH_PROP_NAME, SECRETS_DEFAULT_CERBERUS_PATH)
                     .get();
     
             /*
              * So long as we've got a path, let's configure the polling of config from Cerberus into Archaius.
              */
-            if (vaultPath != null && !vaultPath.isEmpty()) {
-                logger.info("Adding Cerberus as Configuration source. Vault Path = " + vaultPath);
+            if (cerberusPath != null && !cerberusPath.isEmpty()) {
+                logger.info("Adding Cerberus as Configuration source. Cerberus Path = " + cerberusPath);
     
                 /*
                  * Create a configuration source passing in a Cerberus client using the ArchaiusCerberusClientFactory and
@@ -212,7 +212,7 @@ The code snippet shown below is an example of how this can be done.
                  * like the URL and token from Archaius properties.
                  */
                 final PolledConfigurationSource polledConfigurationSource = new NamespacedCerberusConfigurationSource(
-                        ArchaiusCerberusClientFactory.getClient(), vaultPath);
+                        ArchaiusCerberusClientFactory.getClient(), cerberusPath);
     
                 /*
                  * Setup the scheduler for how often this configuration source should be refreshed.
@@ -233,7 +233,7 @@ The code snippet shown below is an example of how this can be done.
                         .annotatedWith(Names.named("cerberus.config"))
                         .toInstance(cerberusConfig);
             } else {
-                logger.info("Property corresponding to the Vault path for secrets not found! "
+                logger.info("Property corresponding to the Cerberus path for secrets not found! "
                         + "Cerberus not added as Configuration source");
             }
         }

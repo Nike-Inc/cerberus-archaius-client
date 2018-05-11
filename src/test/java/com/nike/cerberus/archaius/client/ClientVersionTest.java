@@ -43,6 +43,5 @@ public class ClientVersionTest {
         String result = ClientVersion.getClientHeaderValue();
         assertTrue(StringUtils.contains(result, ClientVersion.HEADER_VALUE_PREFIX));
         assertTrue(StringUtils.contains(result, com.nike.cerberus.client.ClientVersion.getVersion()));
-        assertTrue(StringUtils.contains(result, com.nike.vault.client.ClientVersion.getVersion()));
     }
 }
