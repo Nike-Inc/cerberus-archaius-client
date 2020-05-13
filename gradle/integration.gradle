@@ -31,4 +31,5 @@ dependencies {
     integrationCompile configurations.testCompile
     integrationCompile sourceSets.test.output
     integrationRuntime configurations.testRuntime
+    integrationCompile 'com.fieldju:commons:1.1.0'
 }
