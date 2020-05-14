@@ -22,69 +22,67 @@ import com.netflix.config.PollResult;
 import com.netflix.config.PolledConfigurationSource;
 import com.nike.cerberus.client.CerberusClient;
 import com.nike.cerberus.client.model.CerberusResponse;
+import java.util.Map;
+import java.util.Set;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.Set;
-
 /**
- * Implementation of {@link PolledConfigurationSource} that reads configuration
- * from one or more paths in Cerberus
+ * Implementation of {@link PolledConfigurationSource} that reads configuration from one or more
+ * paths in Cerberus
  */
 public class CerberusConfigurationSource extends BaseCerberusConfigurationSource {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+  private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    /**
-     * Constructor that accepts a Set&lt;String&gt; for paths.
-     *
-     * @param cerberusClient Instance of {@link CerberusClient}
-     * @param paths Set&lt;String&gt; containing cerberus paths where configuration is stored
-     * @throws IllegalArgumentException if cerberusClient is null or if paths is null/empty
-     */
-    public CerberusConfigurationSource(final CerberusClient cerberusClient, final Set<String> paths) {
-        super(cerberusClient, paths);
-    }
+  /**
+   * Constructor that accepts a Set&lt;String&gt; for paths.
+   *
+   * @param cerberusClient Instance of {@link CerberusClient}
+   * @param paths Set&lt;String&gt; containing cerberus paths where configuration is stored
+   * @throws IllegalArgumentException if cerberusClient is null or if paths is null/empty
+   */
+  public CerberusConfigurationSource(final CerberusClient cerberusClient, final Set<String> paths) {
+    super(cerberusClient, paths);
+  }
 
-    /**
-     * Constructor that accepts var args for paths.
-     *
-     * @param cerberusClient Instance of {@link CerberusClient}
-     * @param paths one or more cerberus paths where configuration is stored
-     * @throws IllegalArgumentException if cerberusClient is null or if paths is null/empty
-     */
-    public CerberusConfigurationSource(final CerberusClient cerberusClient, final String... paths) {
-        super(cerberusClient, paths);
-    }
+  /**
+   * Constructor that accepts var args for paths.
+   *
+   * @param cerberusClient Instance of {@link CerberusClient}
+   * @param paths one or more cerberus paths where configuration is stored
+   * @throws IllegalArgumentException if cerberusClient is null or if paths is null/empty
+   */
+  public CerberusConfigurationSource(final CerberusClient cerberusClient, final String... paths) {
+    super(cerberusClient, paths);
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public PollResult poll(final boolean initial, final Object checkPoint) {
-        logger.debug("poll() initial={}", initial);
-        final Map<String, Object> config = getMap();
-        logger.info("poll() successfully read {} keys from Cerberus", config.size());
-        return PollResult.createFull(getMap());
-    }
+  /** {@inheritDoc} */
+  @Override
+  public PollResult poll(final boolean initial, final Object checkPoint) {
+    logger.debug("poll() initial={}", initial);
+    final Map<String, Object> config = getMap();
+    logger.info("poll() successfully read {} keys from Cerberus", config.size());
+    return PollResult.createFull(getMap());
+  }
 
-    /**
-     * Returns config pulled from Cerberus, keyed exactly the same way they are in Cerberus.
-     * @return Cerberus config
-     */
-    public AbstractConfiguration getConfig(){
-        return new ConcurrentMapConfiguration(getMap());
-    }
+  /**
+   * Returns config pulled from Cerberus, keyed exactly the same way they are in Cerberus.
+   *
+   * @return Cerberus config
+   */
+  public AbstractConfiguration getConfig() {
+    return new ConcurrentMapConfiguration(getMap());
+  }
 
-    private Map<String, Object> getMap() {
-        final Map<String, Object> config = Maps.newHashMap();
-        for (final String path : getPaths()) {
-            logger.debug("poll: reading cerberus path '{}'...", path);
-            final CerberusResponse cerberusResponse = getCerberusClient().read(path);
-            config.putAll(cerberusResponse.getData());
-        }
-        return config;
+  private Map<String, Object> getMap() {
+    final Map<String, Object> config = Maps.newHashMap();
+    for (final String path : getPaths()) {
+      logger.debug("poll: reading cerberus path '{}'...", path);
+      final CerberusResponse cerberusResponse = getCerberusClient().read(path);
+      config.putAll(cerberusResponse.getData());
     }
+    return config;
+  }
 }

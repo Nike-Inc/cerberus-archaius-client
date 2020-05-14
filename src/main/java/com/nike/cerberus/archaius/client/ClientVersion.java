@@ -16,53 +16,52 @@
 
 package com.nike.cerberus.archaius.client;
 
+import java.io.InputStream;
+import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
-import java.util.Properties;
-
-/**
- * Class to get the version of the current Cerberus Archaius Client
- */
+/** Class to get the version of the current Cerberus Archaius Client */
 public class ClientVersion {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientVersion.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ClientVersion.class);
 
-    protected static final String CLIENT_VERSION_PROPERTY_FILE = "cerberus-archaius-client.properties";
+  protected static final String CLIENT_VERSION_PROPERTY_FILE =
+      "cerberus-archaius-client.properties";
 
-    private static final String ARCHAIUS_CLIENT_VERSION_PROPERTY = "cerberus_archaius_client.version";
+  private static final String ARCHAIUS_CLIENT_VERSION_PROPERTY = "cerberus_archaius_client.version";
 
-    public static final String CERBERUS_CLIENT_HEADER = "X-Cerberus-Client";
+  public static final String CERBERUS_CLIENT_HEADER = "X-Cerberus-Client";
 
-    public static final String HEADER_VALUE_PREFIX = "CerberusArchaiusClient";
+  public static final String HEADER_VALUE_PREFIX = "CerberusArchaiusClient";
 
-    public static String getVersion() {
+  public static String getVersion() {
 
-        String clientVersion = "unknown";
-        try {
-            InputStream propsStream = ClientVersion.class.getClassLoader().getResourceAsStream(CLIENT_VERSION_PROPERTY_FILE);
-            Properties properties = new Properties();
-            properties.load(propsStream);
+    String clientVersion = "unknown";
+    try {
+      InputStream propsStream =
+          ClientVersion.class.getClassLoader().getResourceAsStream(CLIENT_VERSION_PROPERTY_FILE);
+      Properties properties = new Properties();
+      properties.load(propsStream);
 
-            clientVersion = properties.getProperty(ARCHAIUS_CLIENT_VERSION_PROPERTY);
-        } catch (Exception e) {
-            LOGGER.error("Failed to load client properties file", e);
-        }
-
-        return clientVersion;
+      clientVersion = properties.getProperty(ARCHAIUS_CLIENT_VERSION_PROPERTY);
+    } catch (Exception e) {
+      LOGGER.error("Failed to load client properties file", e);
     }
 
-    public static String getClientHeaderValue() {
+    return clientVersion;
+  }
 
-        String cerberusClientHeaderValue = "unknown";
+  public static String getClientHeaderValue() {
 
-        try {
-            cerberusClientHeaderValue = com.nike.cerberus.client.ClientVersion.getClientHeaderValue();
-        } catch (Exception e) {
-            LOGGER.error("Failed to get Cerberus Client version", e);
-        }
+    String cerberusClientHeaderValue = "unknown";
 
-        return String.format("%s/%s %s", HEADER_VALUE_PREFIX, getVersion(), cerberusClientHeaderValue);
+    try {
+      cerberusClientHeaderValue = com.nike.cerberus.client.ClientVersion.getClientHeaderValue();
+    } catch (Exception e) {
+      LOGGER.error("Failed to get Cerberus Client version", e);
     }
+
+    return String.format("%s/%s %s", HEADER_VALUE_PREFIX, getVersion(), cerberusClientHeaderValue);
+  }
 }

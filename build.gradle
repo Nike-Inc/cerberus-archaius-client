@@ -22,6 +22,18 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
+apply plugin: "com.diffplug.gradle.spotless"
+
+spotless {
+    java {
+        target project.fileTree(project.rootDir) {
+            include '**/*.java'
+            exclude '.gradle/**'
+            exclude 'build/**'
+        }
+        googleJavaFormat()
+    }
+}
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7

@@ -16,73 +16,65 @@
 
 package com.nike.cerberus.archaius.client;
 
-import cerberus.okhttp3.HttpUrl;
-import com.nike.cerberus.client.CerberusClient;
-import com.nike.cerberus.client.CerberusClientException;
-import com.nike.cerberus.client.auth.CerberusCredentialsProvider;
-import org.apache.commons.configuration.AbstractConfiguration;
-import org.apache.commons.lang3.StringUtils;
-import com.netflix.config.ConfigurationManager;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Tests the ArchaiusCerberusUrlResolver class
- */
+import cerberus.okhttp3.HttpUrl;
+import com.nike.cerberus.client.CerberusClient;
+import com.nike.cerberus.client.CerberusClientException;
+import org.apache.commons.configuration.AbstractConfiguration;
+import org.junit.Before;
+import org.junit.Test;
+
+/** Tests the ArchaiusCerberusUrlResolver class */
 public class ArchaiusCerberusClientFactoryTest {
 
-    private AbstractConfiguration config;
-    private ArchaiusCerberusUrlResolver arch;
+  private AbstractConfiguration config;
+  private ArchaiusCerberusUrlResolver arch;
 
-    @Before
-    public void setUp() {
-        arch = mock(ArchaiusCerberusUrlResolver.class);
-        config = mock(AbstractConfiguration.class);
+  @Before
+  public void setUp() {
+    arch = mock(ArchaiusCerberusUrlResolver.class);
+    config = mock(AbstractConfiguration.class);
+  }
+
+  @Test
+  public void testGetClient() {
+    when(arch.resolveRegion(config)).thenReturn("us-west-2");
+    when(arch.resolveUrl(config)).thenReturn("http://foo.bar");
+    CerberusClient client = ArchaiusCerberusClientFactory.getClient(arch, config);
+
+    HttpUrl actualUrl = client.getCerberusUrl();
+    HttpUrl expectedUrl = HttpUrl.parse("http://foo.bar");
+    assertEquals(expectedUrl, actualUrl);
+  }
+
+  @Test(expected = CerberusClientException.class)
+  public void testNullGetClient() {
+    CerberusClient client = null;
+    ArchaiusCerberusClientFactory.getClient();
+  }
+
+  @Test
+  public void testGetClientNoRegion() {
+    when(arch.resolveRegion(config)).thenReturn(null);
+    when(arch.resolveUrl(config)).thenReturn("http://foo.bar");
+    try {
+      CerberusClient client = ArchaiusCerberusClientFactory.getClient(arch, config);
+    } catch (Exception exc) {
+      assertEquals(CerberusClientException.class, exc.getClass());
     }
+  }
 
-    @Test
-    public void testGetClient() {
-        when(arch.resolveRegion(config)).thenReturn("us-west-2");
-        when(arch.resolveUrl(config)).thenReturn("http://foo.bar");
-        CerberusClient client = ArchaiusCerberusClientFactory.getClient(arch, config);
-
-        HttpUrl actualUrl = client.getCerberusUrl();
-        HttpUrl expectedUrl = HttpUrl.parse("http://foo.bar");
-        assertEquals(expectedUrl, actualUrl);
+  @Test
+  public void testGetClientNoUrl() {
+    when(arch.resolveRegion(config)).thenReturn("us-west-2");
+    when(arch.resolveUrl(config)).thenReturn(null);
+    try {
+      CerberusClient client = ArchaiusCerberusClientFactory.getClient(arch, config);
+    } catch (Exception exc) {
+      assertEquals(CerberusClientException.class, exc.getClass());
     }
-
-    @Test(expected = CerberusClientException.class)
-    public void testNullGetClient() {
-        CerberusClient client = null;
-        ArchaiusCerberusClientFactory.getClient();
-    }
-
-    @Test
-    public void testGetClientNoRegion() {
-        when(arch.resolveRegion(config)).thenReturn(null);
-        when(arch.resolveUrl(config)).thenReturn("http://foo.bar");
-        try {
-            CerberusClient client = ArchaiusCerberusClientFactory.getClient(arch, config);
-        }
-        catch(Exception exc) {
-            assertEquals(CerberusClientException.class, exc.getClass());
-        }
-    }
-
-    @Test
-    public void testGetClientNoUrl() {
-        when(arch.resolveRegion(config)).thenReturn("us-west-2");
-        when(arch.resolveUrl(config)).thenReturn(null);
-        try {
-            CerberusClient client = ArchaiusCerberusClientFactory.getClient(arch, config);
-        }
-        catch(Exception exc) {
-            assertEquals(CerberusClientException.class, exc.getClass());
-        }
-    }
+  }
 }
