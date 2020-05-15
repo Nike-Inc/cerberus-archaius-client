@@ -23,22 +23,22 @@ import com.netflix.config.PolledConfigurationSource;
 import com.nike.cerberus.client.CerberusClient;
 import com.nike.cerberus.client.model.CerberusListResponse;
 import com.nike.cerberus.client.model.CerberusResponse;
+import java.util.Map;
+import java.util.Set;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.Set;
-
 /**
  * Implementation of {@link PolledConfigurationSource} that will recursively traverse one or more
  * full Cerberus safe deposit boxes.
  *
- * Properties will be available in Archaius in the convention of the full path with each node separated with a period
- * with the property name being appended to the end
+ * <p>Properties will be available in Archaius in the convention of the full path with each node
+ * separated with a period with the property name being appended to the end
  *
- * Ex. app/myApplication/testPath/myProperty will be available as app.myApplication.testPath.myProperty
+ * <p>Ex. app/myApplication/testPath/myProperty will be available as
+ * app.myApplication.testPath.myProperty
  */
 public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigurationSource {
 
@@ -46,27 +46,29 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
 
     /**
      * Constructor that accepts a Set&lt;String&gt; for paths
-     * @param cerberusClient An already configured cerberus client.  May not be null.
-     * @param paths Set containing cerberus paths where configuration is stored.  May not be null.
+     *
+     * @param cerberusClient An already configured cerberus client. May not be null.
+     * @param paths Set containing cerberus paths where configuration is stored. May not be null.
      * @throws IllegalArgumentException if cerberusClient is null or if paths is null/empty
      */
-    public NamespacedCerberusConfigurationSource(final CerberusClient cerberusClient, final Set<String> paths) {
+    public NamespacedCerberusConfigurationSource(
+            final CerberusClient cerberusClient, final Set<String> paths) {
         super(cerberusClient, paths);
     }
 
     /**
      * Constructor that accepts var args for paths
-     * @param cerberusClient An already configured cerberus client.  May not be null.
-     * @param paths One or more cerberus paths where configuration is stored.  May not be null.
+     *
+     * @param cerberusClient An already configured cerberus client. May not be null.
+     * @param paths One or more cerberus paths where configuration is stored. May not be null.
      * @throws IllegalArgumentException If cerberusClient is null or if paths is null/empty
      */
-    public NamespacedCerberusConfigurationSource(final CerberusClient cerberusClient, final String... paths) {
+    public NamespacedCerberusConfigurationSource(
+            final CerberusClient cerberusClient, final String... paths) {
         super(cerberusClient, paths);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public PollResult poll(final boolean initial, final Object checkPoint) {
         logger.debug("poll() initial={}", initial);
@@ -77,6 +79,7 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
 
     /**
      * Returns config pulled from Cerberus, keyed using the full path to the property.
+     *
      * @return Cerberus config
      */
     public AbstractConfiguration getConfig() {
@@ -84,11 +87,11 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
     }
 
     /**
-     * Returns true if a path meets the definition of a folder according to cerberus's convention (e.g. path ends with a
-     * forward slash).
+     * Returns true if a path meets the definition of a folder according to cerberus's convention
+     * (e.g. path ends with a forward slash).
      *
-     * See https://www.cerberusproject.io/docs/secrets/generic/index.html under the List API documentation for details as
-     * to Cerberus's convention
+     * <p>See https://www.cerberusproject.io/docs/secrets/generic/index.html under the List API
+     * documentation for details as to Cerberus's convention
      *
      * @param path - The cerberus path we are checking to determine if it is a folder or a leaf.
      * @return A boolean value, true if the path is a folder.
@@ -100,7 +103,7 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
     /**
      * Given a path, replaces the "/" with "." to match standard property name notation for Java.
      *
-     * Example: shared/foo/bar becomes shared.foo.bar
+     * <p>Example: shared/foo/bar becomes shared.foo.bar
      *
      * @param path Path to do replacement on
      * @return The modified path
@@ -116,8 +119,8 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
     }
 
     /**
-     * Traverses the cerberus path from the provided path down through it's leaves. Places all properties into the map that
-     * will be used to populate the Archaius configuration.
+     * Traverses the cerberus path from the provided path down through it's leaves. Places all
+     * properties into the map that will be used to populate the Archaius configuration.
      *
      * @param path - The parent path, all properties under this path will be populated.
      * @return - A map containing all the properties contained under the parent path.
@@ -126,7 +129,7 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
         final Map<String, Object> config = Maps.newHashMap();
         if (isFolder(path)) {
             final CerberusListResponse listResponse = getCerberusClient().list(path);
-            for(final String subpath : listResponse.getKeys()) {
+            for (final String subpath : listResponse.getKeys()) {
                 final String fullPath = path + subpath;
                 config.putAll(buildEntriesMap(fullPath));
             }

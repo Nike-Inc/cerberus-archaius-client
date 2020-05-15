@@ -19,14 +19,11 @@ package com.nike.cerberus.archaius.client.provider;
 import com.google.common.collect.Sets;
 import com.netflix.config.PolledConfigurationSource;
 import com.nike.cerberus.client.CerberusClient;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Set;
-
-/**
- * Base class for Cerberus configuration sources.
- */
+/** Base class for Cerberus configuration sources. */
 public abstract class BaseCerberusConfigurationSource implements PolledConfigurationSource {
 
     private final CerberusClient cerberusClient;
@@ -52,7 +49,7 @@ public abstract class BaseCerberusConfigurationSource implements PolledConfigura
         }
         this.cerberusClient = cerberusClient;
         this.paths = Sets.newHashSet(paths);
-        logger.info("paths={}",  getPaths());
+        logger.info("paths={}", getPaths());
     }
 
     /**

@@ -16,21 +16,16 @@
 
 package com.nike.cerberus.archaius.client;
 
+import com.netflix.config.ConfigurationManager;
+import com.nike.cerberus.client.UrlResolver;
 import javax.annotation.Nullable;
-
 import okhttp3.HttpUrl;
-
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.netflix.config.ConfigurationManager;
-import com.nike.cerberus.client.UrlResolver;
-
-/**
- * Class for resolving the Cerberus URL via Archaius.
- */
+/** Class for resolving the Cerberus URL via Archaius. */
 public class ArchaiusCerberusUrlResolver implements UrlResolver {
 
     public static final String CERBERUS_ADDR_ENV_PROPERTY = "CERBERUS_ADDR";
@@ -46,7 +41,7 @@ public class ArchaiusCerberusUrlResolver implements UrlResolver {
      */
     @Nullable
     @Override
-    public  String resolve() {
+    public String resolve() {
         final AbstractConfiguration configuration = ConfigurationManager.getConfigInstance();
         final String envUrl = configuration.getString(CERBERUS_ADDR_ENV_PROPERTY);
         final String sysUrl = configuration.getString(CERBERUS_ADDR_SYS_PROPERTY);
