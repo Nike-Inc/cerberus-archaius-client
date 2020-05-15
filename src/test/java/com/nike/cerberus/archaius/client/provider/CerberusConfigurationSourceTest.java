@@ -16,6 +16,10 @@
 
 package com.nike.cerberus.archaius.client.provider;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -23,20 +27,13 @@ import com.netflix.config.PollResult;
 import com.nike.cerberus.client.CerberusClient;
 import com.nike.cerberus.client.CerberusServerException;
 import com.nike.cerberus.client.model.CerberusResponse;
+import java.util.Map;
+import java.util.Set;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Map;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-/**
- * Test class for CerberusConfigurationSource
- */
+/** Test class for CerberusConfigurationSource */
 public class CerberusConfigurationSourceTest {
 
     private CerberusConfigurationSource subject;
@@ -56,7 +53,7 @@ public class CerberusConfigurationSourceTest {
     private static final String ARTEMIS_CONFIG_VALUE = "123abc";
 
     @Before
-    public void setup(){
+    public void setup() {
         cerberusClient = mock(CerberusClient.class);
         subject = new CerberusConfigurationSource(cerberusClient, PATH_1, PATH_2);
     }
@@ -82,7 +79,8 @@ public class CerberusConfigurationSourceTest {
         // verify results
         assertThat(result).isNotNull();
         assertThat(result.getComplete()).isNotNull();
-        assertThat(result.getComplete()).containsOnlyKeys(FOOBINATOR_CONFIG_KEY, ARTEMIS_CONFIG_KEY);
+        assertThat(result.getComplete())
+                .containsOnlyKeys(FOOBINATOR_CONFIG_KEY, ARTEMIS_CONFIG_KEY);
 
         AbstractConfiguration config = subject.getConfig();
         assertThat(config).isNotNull();
@@ -99,7 +97,8 @@ public class CerberusConfigurationSourceTest {
         final CerberusResponse foobinatorResponse = new CerberusResponse().setData(foobinatorMap);
         when(cerberusClient.read(PATH_1)).thenReturn(foobinatorResponse);
 
-        when(cerberusClient.read(PATH_2)).thenThrow(new CerberusServerException(500, Lists.newArrayList("Internal error.")));
+        when(cerberusClient.read(PATH_2))
+                .thenThrow(new CerberusServerException(500, Lists.newArrayList("Internal error.")));
 
         // call the method under test
         subject.poll(true, null);
@@ -112,12 +111,11 @@ public class CerberusConfigurationSourceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_constructor_validation_paths_cannot_be_null() {
-        new CerberusConfigurationSource(cerberusClient, (Set<String>)null );
+        new CerberusConfigurationSource(cerberusClient, (Set<String>) null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_constructor_validation_paths_cannot_be_empty() {
         new CerberusConfigurationSource(cerberusClient, Sets.<String>newHashSet());
     }
-
 }

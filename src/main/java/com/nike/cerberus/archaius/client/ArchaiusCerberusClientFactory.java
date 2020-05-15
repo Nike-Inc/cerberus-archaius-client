@@ -16,21 +16,21 @@
 
 package com.nike.cerberus.archaius.client;
 
-import com.nike.cerberus.client.auth.DefaultCerberusCredentialsProviderChain;
 import com.nike.cerberus.client.CerberusClient;
 import com.nike.cerberus.client.CerberusClientFactory;
-
+import com.nike.cerberus.client.auth.DefaultCerberusCredentialsProviderChain;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Client factory for creating a Cerberus client with URL resolved using the ArchaiusCerberusUrlResolver
+ * Client factory for creating a Cerberus client with URL resolved using the
+ * ArchaiusCerberusUrlResolver
  */
 public class ArchaiusCerberusClientFactory {
 
     /**
-     * Resolves the Cerberus/Cerberus URL via the {@link ArchaiusCerberusUrlResolver} and creates a new {@link CerberusClient}
-     * with the {@link DefaultCerberusCredentialsProviderChain}.
+     * Resolves the Cerberus/Cerberus URL via the {@link ArchaiusCerberusUrlResolver} and creates a
+     * new {@link CerberusClient} with the {@link DefaultCerberusCredentialsProviderChain}.
      *
      * @return Cerberus client
      */
@@ -44,8 +44,10 @@ public class ArchaiusCerberusClientFactory {
         return CerberusClientFactory.getClient(
                 archaiusUrlResolver,
                 // pass the client HTTP header value to be used in authenticate calls to Cerberus
-                new DefaultCerberusCredentialsProviderChain(archaiusUrlResolver, xCerberusClientHeaderValue),
-                // pass the client header to be used in all other calls to Cerberus (e.g. read, write, etc.)
+                new DefaultCerberusCredentialsProviderChain(
+                        archaiusUrlResolver, xCerberusClientHeaderValue),
+                // pass the client header to be used in all other calls to Cerberus (e.g. read,
+                // write, etc.)
                 defaultHeaders);
     }
 }

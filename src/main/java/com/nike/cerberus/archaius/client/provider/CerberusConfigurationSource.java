@@ -22,16 +22,15 @@ import com.netflix.config.PollResult;
 import com.netflix.config.PolledConfigurationSource;
 import com.nike.cerberus.client.CerberusClient;
 import com.nike.cerberus.client.model.CerberusResponse;
+import java.util.Map;
+import java.util.Set;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.Set;
-
 /**
- * Implementation of {@link PolledConfigurationSource} that reads configuration
- * from one or more paths in Cerberus
+ * Implementation of {@link PolledConfigurationSource} that reads configuration from one or more
+ * paths in Cerberus
  */
 public class CerberusConfigurationSource extends BaseCerberusConfigurationSource {
 
@@ -44,7 +43,8 @@ public class CerberusConfigurationSource extends BaseCerberusConfigurationSource
      * @param paths Set&lt;String&gt; containing cerberus paths where configuration is stored
      * @throws IllegalArgumentException if cerberusClient is null or if paths is null/empty
      */
-    public CerberusConfigurationSource(final CerberusClient cerberusClient, final Set<String> paths) {
+    public CerberusConfigurationSource(
+            final CerberusClient cerberusClient, final Set<String> paths) {
         super(cerberusClient, paths);
     }
 
@@ -59,9 +59,7 @@ public class CerberusConfigurationSource extends BaseCerberusConfigurationSource
         super(cerberusClient, paths);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public PollResult poll(final boolean initial, final Object checkPoint) {
         logger.debug("poll() initial={}", initial);
@@ -72,9 +70,10 @@ public class CerberusConfigurationSource extends BaseCerberusConfigurationSource
 
     /**
      * Returns config pulled from Cerberus, keyed exactly the same way they are in Cerberus.
+     *
      * @return Cerberus config
      */
-    public AbstractConfiguration getConfig(){
+    public AbstractConfiguration getConfig() {
         return new ConcurrentMapConfiguration(getMap());
     }
 

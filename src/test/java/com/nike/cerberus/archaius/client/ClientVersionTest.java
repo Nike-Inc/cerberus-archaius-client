@@ -16,15 +16,13 @@
 
 package com.nike.cerberus.archaius.client;
 
-import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
-
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Tests the ClientVersion class
- */
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Test;
+
+/** Tests the ClientVersion class */
 public class ClientVersionTest {
 
     @Test
@@ -42,6 +40,7 @@ public class ClientVersionTest {
 
         String result = ClientVersion.getClientHeaderValue();
         assertTrue(StringUtils.contains(result, ClientVersion.HEADER_VALUE_PREFIX));
-        assertTrue(StringUtils.contains(result, com.nike.cerberus.client.ClientVersion.getVersion()));
+        assertTrue(
+                StringUtils.contains(result, com.nike.cerberus.client.ClientVersion.getVersion()));
     }
 }

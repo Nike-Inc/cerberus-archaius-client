@@ -31,7 +31,7 @@ spotless {
             exclude '.gradle/**'
             exclude 'build/**'
         }
-        googleJavaFormat()
+        googleJavaFormat().aosp()
     }
 }
 
