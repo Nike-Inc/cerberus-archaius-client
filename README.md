@@ -244,6 +244,28 @@ The code snippet shown below is an example of how this can be done.
 
 Cerberus Archaius client is a small project. It only has a few classes and they are all fully documented. For further details please see the source code, including javadocs and unit tests.
 
+## Development
+
+### Run Integration Tests
+
+First, make sure the following environment variables are set before running the Cerberus Archaius Client integration tests:
+
+``` bash
+    export CERBERUS_ADDR=https://example.cerberus.com
+    export TEST_REGION=us-west-2
+    export CERBERUS_ROOT_SDB_PATH=example/integration-tests-sdb/
+```
+
+Then, make sure AWS credentials have been obtained. One method is by running [gimme-aws-creds](https://github.com/Nike-Inc/gimme-aws-creds):
+
+```bash
+    gimme-aws-creds
+```
+
+Next, in the project directory run:
+```gradle
+    ./gradlew integration
+```
 <a name="license"></a>
 ## License
 
