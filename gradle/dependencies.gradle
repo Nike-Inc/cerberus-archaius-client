@@ -43,7 +43,7 @@ configurations.all {
 
 dependencies {
     compile 'com.netflix.archaius:archaius-aws:0.6.5'
-    compile 'com.nike:cerberus-client:7.3.0'
+    compile 'com.nike:cerberus-client:7.3.1'
 
     compile "org.apache.commons:commons-lang3:3.5"
     compile "com.squareup.okhttp3:okhttp:3.9.0"
