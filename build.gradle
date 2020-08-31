@@ -50,5 +50,6 @@ apply from: file('gradle/dependencies.gradle')
 apply from: file('gradle/check.gradle')
 apply from: file('gradle/integration.gradle')
 apply from: file('gradle/bintray.gradle')
+apply from: file('gradle/owasp-dependency-check.gradle')
 
 group = groupId
