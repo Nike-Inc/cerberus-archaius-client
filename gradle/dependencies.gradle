@@ -21,9 +21,29 @@ repositories {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force "ch.qos.logback:logback-core:1.2.3"
+        force "ch.qos.logback:logback-classic:1.2.3"
+        force "net.sourceforge.pmd:pmd-core:6.21.0"
+        force "net.sourceforge.pmd:pmd-java:6.21.0"
+        force "com.fasterxml.jackson:jackson-core:2.11.1"
+        force "com.fasterxml.jackson:jackson-annotations:2.11.1"
+        force "com.fasterxml.jackson.core:jackson-databind:2.11.1"
+        force "org.apache.httpcomponents:httpclient:4.5.12"
+
+        dependencySubstitution {
+            substitute module("org.mortbay.jetty:jetty") with module("org.eclipse.jetty:jetty-server:9.4.30.v20200611")
+            substitute module("org.mortbay.jetty:jetty-util") with module("org.eclipse.jetty:jetty-util:9.4.30.v20200611")
+            substitute module("org.mortbay.jetty:jetty-http") with module("org.eclipse.jetty:jetty-http:9.4.30.v20200611")
+        }
+    }
+    exclude group: 'org.mortbay.jetty', module:'servlet-api-2.5'
+}
+
 dependencies {
     compile 'com.netflix.archaius:archaius-aws:0.6.5'
-    compile 'com.nike:cerberus-client:7.1.1'
+    compile 'com.nike:cerberus-client:7.3.1'
 
     compile "org.apache.commons:commons-lang3:3.5"
     compile "com.squareup.okhttp3:okhttp:3.9.0"
