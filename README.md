@@ -252,7 +252,7 @@ First, make sure the following environment variables are set before running the 
 
 ``` bash
     export CERBERUS_ADDR=https://example.cerberus.com
-    export TEST_REGION=us-west-2
+    export CERBERUS_REGION=us-west-2
     export CERBERUS_ROOT_SDB_PATH=example/integration-tests-sdb/
 ```
 

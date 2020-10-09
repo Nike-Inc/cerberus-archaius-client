@@ -108,7 +108,7 @@ public class ArchaiusClientIntegrationTests {
         // confirm secret is deleted
         try {
             cerberusClient.read(sdbFullSecretPath);
-        } catch (CerberusServerException cse) {
+        } catch (CerberusServerApiException cse) {
             assertEquals(404, cse.getCode());
         }
     }
