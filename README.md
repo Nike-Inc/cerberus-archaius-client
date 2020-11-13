@@ -2,7 +2,7 @@
 
 [ ![Download](https://api.bintray.com/packages/nike/maven/cerberus-archaius-client/images/download.svg) ](https://bintray.com/nike/maven/cerberus-archaius-client/_latestVersion)
 [![][travis img]][travis]
-[![Coverage Status](https://coveralls.io/repos/github/Nike-Inc/cerberus-archaius-client/badge.svg)](https://coveralls.io/github/Nike-Inc/cerberus-archaius-client)
+[![codecov](https://codecov.io/gh/Nike-Inc/cerberus-archaius-client/branch/master/graph/badge.svg)](https://codecov.io/gh/Nike-Inc/cerberus-archaius-client)
 [![][license img]][license]
 
 A java based client library that surfaces Cerberus secrets via Archaius.
