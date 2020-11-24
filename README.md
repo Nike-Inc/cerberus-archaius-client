@@ -1,7 +1,7 @@
 # Cerberus Archaius Client
 
 [ ![Download](https://api.bintray.com/packages/nike/maven/cerberus-archaius-client/images/download.svg) ](https://bintray.com/nike/maven/cerberus-archaius-client/_latestVersion)
-[![][travis img]][travis]
+![][gh actions img]]
 [![codecov](https://codecov.io/gh/Nike-Inc/cerberus-archaius-client/branch/master/graph/badge.svg)](https://codecov.io/gh/Nike-Inc/cerberus-archaius-client)
 [![][license img]][license]
 
@@ -271,8 +271,7 @@ Next, in the project directory run:
 
 Cerberus Archaius client is released under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-[travis]:https://travis-ci.org/Nike-Inc/cerberus-archaius-client
-[travis img]:https://api.travis-ci.org/Nike-Inc/cerberus-archaius-client.svg?branch=master
+[gh actions img]:https://github.com/Nike-Inc/cerberus-archaius-client/workflows/Build/badge.svg?branch=master
 
 [license]:LICENSE.txt
 [license img]:https://img.shields.io/badge/License-Apache%202-blue.svg
