@@ -1,7 +1,7 @@
 # Cerberus Archaius Client
 
 [ ![Download](https://api.bintray.com/packages/nike/maven/cerberus-archaius-client/images/download.svg) ](https://bintray.com/nike/maven/cerberus-archaius-client/_latestVersion)
-![][gh actions img]]
+![][gh actions img]
 [![codecov](https://codecov.io/gh/Nike-Inc/cerberus-archaius-client/branch/master/graph/badge.svg)](https://codecov.io/gh/Nike-Inc/cerberus-archaius-client)
 [![][license img]][license]
 
