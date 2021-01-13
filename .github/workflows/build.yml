@@ -6,10 +6,11 @@ name: Build
 on:
   push:
     branches:
-      - '*'
+      - '**'
   pull_request:
     branches:
       - master
+      - dep/dependency_upgrade_staging
   schedule:
     - cron: "0 22 * * 1"
 
@@ -43,5 +44,6 @@ jobs:
           SLACK_CHANNEL: cerberus-alerts
           SLACK_MESSAGE: 'Cerberus main build has failed :build-failed:'
           SLACK_ICON: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-          SLACK_TITLE: Cerberus Build Failure Notification
+          SLACK_TITLE: Cerberus Archaius Client Build Failure Notification
+          SLACK_COLOR: '#FF0000'
           SLACK_USERNAME: GitHub Actions
