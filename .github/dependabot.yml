@@ -11,14 +11,6 @@ updates:
     open-pull-requests-limit: 30
     schedule:
       interval: "daily"
-  - package-ecosystem: "npm"
-    # Look for `package.json` and `lock` files in the `cerberus-dashboard` directory
-    directory: "/cerberus-dashboard"
-    target-branch: "dep/dependency_upgrade_staging"
-    open-pull-requests-limit: 30
-    # Check the npm registry for updates every day (weekdays)
-    schedule:
-      interval: "daily"
   - package-ecosystem: "github-actions"
     # Look for `package.json` and `lock` files in the `cerberus-dashboard` directory
     directory: "/"
