@@ -30,7 +30,7 @@ configurations.all {
         force "com.fasterxml.jackson:jackson-core:2.11.1"
         force "com.fasterxml.jackson:jackson-annotations:2.11.1"
         force "com.fasterxml.jackson.core:jackson-databind:2.11.1"
-        force "org.apache.httpcomponents:httpclient:4.5.12"
+        force "org.apache.httpcomponents:httpclient:4.5.13"
 
         dependencySubstitution {
             substitute module("org.mortbay.jetty:jetty") with module("org.eclipse.jetty:jetty-server:9.4.33.v20201020")
