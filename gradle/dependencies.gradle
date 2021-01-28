@@ -52,6 +52,6 @@ dependencies {
     testRuntime 'org.slf4j:slf4j-simple:1.7.30'
 
     testCompile 'junit:junit:4.13.1'
-    testCompile 'org.mockito:mockito-core:2.7.9'
+    testCompile 'org.mockito:mockito-core:3.7.7'
     testCompile 'org.assertj:assertj-core:2.6.0'
 }
