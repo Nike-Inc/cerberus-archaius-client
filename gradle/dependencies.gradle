@@ -45,7 +45,7 @@ dependencies {
     compile 'com.netflix.archaius:archaius-aws:0.7.7'
     compile 'com.nike:cerberus-client:7.3.2'
 
-    compile "org.apache.commons:commons-lang3:3.5"
+    compile "org.apache.commons:commons-lang3:3.11"
     compile "com.squareup.okhttp3:okhttp:3.9.0"
 
     compile 'org.slf4j:slf4j-api:1.7.25'
