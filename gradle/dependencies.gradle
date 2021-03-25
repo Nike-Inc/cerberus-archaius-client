@@ -16,10 +16,9 @@
 
 repositories {
     jcenter()
-    maven {
-        url "https://dl.bintray.com/nike/maven"
-    }
 }
+
+def AWS_SDK_VERSION = '1.11.+'
 
 configurations.all {
     resolutionStrategy {
@@ -42,9 +41,16 @@ configurations.all {
 }
 
 dependencies {
+    implementation('com.nike:cerberus-client'){
+        version {
+            branch = 'master'
+        }
+    }
+    compile "com.amazonaws:aws-java-sdk-core:${AWS_SDK_VERSION}"
     compile 'com.netflix.archaius:archaius-aws:0.7.7'
-    compile 'com.nike:cerberus-client:7.4.0'
+    compile 'com.netflix.archaius:archaius-core:0.7.7'
 
+    compile 'commons-configuration:commons-configuration:1.10'
     compile "org.apache.commons:commons-lang3:3.11"
     compile "com.squareup.okhttp3:okhttp:3.9.0"
 

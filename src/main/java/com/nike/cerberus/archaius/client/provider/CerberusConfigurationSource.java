@@ -16,15 +16,14 @@
 
 package com.nike.cerberus.archaius.client.provider;
 
-import com.google.common.collect.Maps;
 import com.netflix.config.ConcurrentMapConfiguration;
 import com.netflix.config.PollResult;
 import com.netflix.config.PolledConfigurationSource;
 import com.nike.cerberus.client.CerberusClient;
 import com.nike.cerberus.client.model.CerberusResponse;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.configuration.AbstractConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CerberusConfigurationSource extends BaseCerberusConfigurationSource {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(CerberusConfigurationSource.class);
 
     /**
      * Constructor that accepts a Set&lt;String&gt; for paths.
@@ -73,12 +72,12 @@ public class CerberusConfigurationSource extends BaseCerberusConfigurationSource
      *
      * @return Cerberus config
      */
-    public AbstractConfiguration getConfig() {
+    public ConcurrentMapConfiguration getConfig() {
         return new ConcurrentMapConfiguration(getMap());
     }
 
     private Map<String, Object> getMap() {
-        final Map<String, Object> config = Maps.newHashMap();
+        final Map<String, Object> config = new HashMap<>();
         for (final String path : getPaths()) {
             logger.debug("poll: reading cerberus path '{}'...", path);
             final CerberusResponse cerberusResponse = getCerberusClient().read(path);

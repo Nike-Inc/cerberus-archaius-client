@@ -16,6 +16,7 @@
 
 package com.nike.cerberus.archaius.client;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import org.slf4j.Logger;
@@ -36,37 +37,44 @@ public class ClientVersion {
 
     public static final String HEADER_VALUE_PREFIX = "CerberusArchaiusClient";
 
+    public static final String UNKNOWN = "unknown";
+
     public static String getVersion() {
 
-        String clientVersion = "unknown";
+        InputStream propsStream =
+                Thread.currentThread()
+                        .getContextClassLoader()
+                        .getResourceAsStream(CLIENT_VERSION_PROPERTY_FILE);
+
         try {
-            InputStream propsStream =
-                    ClientVersion.class
-                            .getClassLoader()
-                            .getResourceAsStream(CLIENT_VERSION_PROPERTY_FILE);
             Properties properties = new Properties();
             properties.load(propsStream);
-
-            clientVersion = properties.getProperty(ARCHAIUS_CLIENT_VERSION_PROPERTY);
+            return properties.getProperty(ARCHAIUS_CLIENT_VERSION_PROPERTY);
         } catch (Exception e) {
             LOGGER.error("Failed to load client properties file", e);
+            return UNKNOWN;
+        } finally {
+            try {
+                if (propsStream != null) {
+                    propsStream.close();
+                }
+            } catch (IOException e) {
+                LOGGER.error("Failed to close input stream", e);
+            }
         }
-
-        return clientVersion;
     }
 
     public static String getClientHeaderValue() {
-
-        String cerberusClientHeaderValue = "unknown";
+        String version = getVersion();
 
         try {
-            cerberusClientHeaderValue =
+            String cerberusClientHeaderValue =
                     com.nike.cerberus.client.ClientVersion.getClientHeaderValue();
+            return String.format(
+                    "%s/%s %s", HEADER_VALUE_PREFIX, version, cerberusClientHeaderValue);
         } catch (Exception e) {
             LOGGER.error("Failed to get Cerberus Client version", e);
+            return String.format("%s/%s %s", HEADER_VALUE_PREFIX, version, UNKNOWN);
         }
-
-        return String.format(
-                "%s/%s %s", HEADER_VALUE_PREFIX, getVersion(), cerberusClientHeaderValue);
     }
 }

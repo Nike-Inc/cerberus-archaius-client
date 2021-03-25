@@ -12,6 +12,20 @@ enables dynamic runtime properties from multiple configuration sources such as U
 
 To learn more about Cerberus, please visit the [Cerberus website](http://engineering.nike.com/cerberus/).
 
+## Publishing Notice 3/17/2021
+As of spring 2021, JFrog has decided to sunset Bintray and JCenter.
+Due to this decision, we are pausing our open source publishing of the Cerberus Archaius Client.
+However, we will still be updating the source code and making new GitHub releases.
+
+In order to build the jar yourself, run this command:
+```bash
+./gradlew assemble
+```
+
+The jar will be located in `./build/libs/`.
+
+For any questions or concerns, create a Github issue [here](https://github.com/Nike-Inc/cerberus-archaius-client/issues/new).
+
 ## Quickstart
 
 ### Using the Archaius Provider
