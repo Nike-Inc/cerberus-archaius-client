@@ -16,16 +16,15 @@
 
 package com.nike.cerberus.archaius.client.provider;
 
-import com.google.common.collect.Maps;
 import com.netflix.config.ConcurrentMapConfiguration;
 import com.netflix.config.PollResult;
 import com.netflix.config.PolledConfigurationSource;
 import com.nike.cerberus.client.CerberusClient;
 import com.nike.cerberus.client.model.CerberusListResponse;
 import com.nike.cerberus.client.model.CerberusResponse;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +41,8 @@ import org.slf4j.LoggerFactory;
  */
 public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigurationSource {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger =
+            LoggerFactory.getLogger(NamespacedCerberusConfigurationSource.class);
 
     /**
      * Constructor that accepts a Set&lt;String&gt; for paths
@@ -82,7 +82,7 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
      *
      * @return Cerberus config
      */
-    public AbstractConfiguration getConfig() {
+    public ConcurrentMapConfiguration getConfig() {
         return new ConcurrentMapConfiguration(getMap());
     }
 
@@ -126,7 +126,7 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
      * @return - A map containing all the properties contained under the parent path.
      */
     private Map<String, Object> buildEntriesMap(final String path) {
-        final Map<String, Object> config = Maps.newHashMap();
+        final Map<String, Object> config = new HashMap<>();
         if (isFolder(path)) {
             final CerberusListResponse listResponse = getCerberusClient().list(path);
             for (final String subpath : listResponse.getKeys()) {
@@ -144,7 +144,7 @@ public class NamespacedCerberusConfigurationSource extends BaseCerberusConfigura
     }
 
     private Map<String, Object> getMap() {
-        final Map<String, Object> config = Maps.newHashMap();
+        final Map<String, Object> config = new HashMap<>();
         for (final String path : getPaths()) {
             logger.debug("poll: reading cerberus path '{}'...", path);
             config.putAll(buildEntriesMap(path));

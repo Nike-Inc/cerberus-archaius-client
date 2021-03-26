@@ -20,15 +20,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.netflix.config.PollResult;
 import com.nike.cerberus.client.CerberusClient;
 import com.nike.cerberus.client.CerberusServerException;
 import com.nike.cerberus.client.model.CerberusResponse;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,10 +57,10 @@ public class CerberusConfigurationSourceTest {
     @Test
     public void poll_loads_both_paths_successfully() {
         // mock dependencies
-        final Map<String, String> foobinatorMap = Maps.newHashMap();
+        final Map<String, String> foobinatorMap = new HashMap<>();
         foobinatorMap.put(FOOBINATOR_CONFIG_KEY, FOOBINATOR_CONFIG_VALUE);
 
-        final Map<String, String> artemisMap = Maps.newHashMap();
+        final Map<String, String> artemisMap = new HashMap<>();
         artemisMap.put(ARTEMIS_CONFIG_KEY, ARTEMIS_CONFIG_VALUE);
 
         final CerberusResponse foobinatorResponse = new CerberusResponse().setData(foobinatorMap);
@@ -92,13 +88,15 @@ public class CerberusConfigurationSourceTest {
     @Test(expected = CerberusServerException.class)
     public void poll_only_loads_data_for_path1() {
         // mock dependencies
-        final Map<String, String> foobinatorMap = Maps.newHashMap();
+        final Map<String, String> foobinatorMap = new HashMap<>();
         foobinatorMap.put(FOOBINATOR_CONFIG_KEY, FOOBINATOR_CONFIG_VALUE);
         final CerberusResponse foobinatorResponse = new CerberusResponse().setData(foobinatorMap);
         when(cerberusClient.read(PATH_1)).thenReturn(foobinatorResponse);
 
         when(cerberusClient.read(PATH_2))
-                .thenThrow(new CerberusServerException(500, Lists.newArrayList("Internal error.")));
+                .thenThrow(
+                        new CerberusServerException(
+                                500, Collections.singletonList("Internal error.")));
 
         // call the method under test
         subject.poll(true, null);
@@ -106,7 +104,8 @@ public class CerberusConfigurationSourceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_constructor_validation_cerberus_client_cannot_be_null() {
-        new CerberusConfigurationSource(null, Sets.newHashSet("/fake/path"));
+        new CerberusConfigurationSource(
+                null, new HashSet<>(Collections.singletonList("/fake/path")));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -116,6 +115,6 @@ public class CerberusConfigurationSourceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_constructor_validation_paths_cannot_be_empty() {
-        new CerberusConfigurationSource(cerberusClient, Sets.<String>newHashSet());
+        new CerberusConfigurationSource(cerberusClient, new HashSet<>());
     }
 }

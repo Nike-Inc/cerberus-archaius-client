@@ -16,9 +16,10 @@
 
 package com.nike.cerberus.archaius.client.provider;
 
-import com.google.common.collect.Sets;
 import com.netflix.config.PolledConfigurationSource;
 import com.nike.cerberus.client.CerberusClient;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,8 @@ public abstract class BaseCerberusConfigurationSource implements PolledConfigura
 
     private final Set<String> paths;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger =
+            LoggerFactory.getLogger(BaseCerberusConfigurationSource.class);
 
     /**
      * Constructor that accepts a Set&lt;String&gt; for paths.
@@ -48,8 +50,8 @@ public abstract class BaseCerberusConfigurationSource implements PolledConfigura
             throw new IllegalArgumentException("paths cannot be null or empty");
         }
         this.cerberusClient = cerberusClient;
-        this.paths = Sets.newHashSet(paths);
-        logger.info("paths={}", getPaths());
+        this.paths = new HashSet<>(paths);
+        logger.info("paths={}", this.paths);
     }
 
     /**
@@ -68,8 +70,8 @@ public abstract class BaseCerberusConfigurationSource implements PolledConfigura
             throw new IllegalArgumentException("paths cannot be null or empty");
         }
         this.cerberusClient = cerberusClient;
-        this.paths = Sets.newHashSet(paths);
-        logger.info("paths={}", getPaths());
+        this.paths = new HashSet<>(Arrays.asList(paths));
+        logger.info("paths={}", this.paths);
     }
 
     public CerberusClient getCerberusClient() {

@@ -20,9 +20,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import cerberus.okhttp3.HttpUrl;
 import com.nike.cerberus.client.CerberusClient;
 import com.nike.cerberus.client.CerberusClientException;
+import okhttp3.HttpUrl;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.junit.Before;
 import org.junit.Test;

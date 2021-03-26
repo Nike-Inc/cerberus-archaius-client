@@ -17,7 +17,7 @@
 package com.nike.cerberus.archaius.client;
 
 import com.amazonaws.regions.Regions;
-import javax.annotation.Nullable;
+import io.github.resilience4j.core.lang.Nullable;
 import okhttp3.HttpUrl;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class ArchaiusCerberusUrlResolver {
     private static final String INVALID_PROPERY_VALUE_TEMPLATE =
             "Could not find a valid value from the property %s";
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(ArchaiusCerberusUrlResolver.class);
 
     /**
      * Get a valid region name or null given a possible region name

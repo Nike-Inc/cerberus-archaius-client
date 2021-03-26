@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.netflix.config.ConcurrentMapConfiguration;
 import com.netflix.config.PollResult;
 import com.nike.cerberus.client.CerberusClient;
 import com.nike.cerberus.client.CerberusServerException;
@@ -28,7 +29,6 @@ import com.nike.cerberus.client.model.CerberusResponse;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.configuration.AbstractConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -101,7 +101,7 @@ public class NamespacedCerberusConfigurationSourceTest {
         assertThat(result.getComplete())
                 .containsOnlyKeys(FOOBINATOR_CONFIG_NAMESPACED_KEY, ARTEMIS_CONFIG_NAMESPACED_KEY);
 
-        AbstractConfiguration config = subject.getConfig();
+        ConcurrentMapConfiguration config = subject.getConfig();
         assertThat(config).isNotNull();
         assertThat(config.getKeys())
                 .containsOnly(FOOBINATOR_CONFIG_NAMESPACED_KEY, ARTEMIS_CONFIG_NAMESPACED_KEY);
