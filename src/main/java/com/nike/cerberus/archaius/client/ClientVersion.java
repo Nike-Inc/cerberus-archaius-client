@@ -41,12 +41,12 @@ public class ClientVersion {
 
     public static String getVersion() {
 
-        InputStream propsStream =
-                Thread.currentThread()
-                        .getContextClassLoader()
-                        .getResourceAsStream(CLIENT_VERSION_PROPERTY_FILE);
-
+        InputStream propsStream = null; // NOPMD
         try {
+            propsStream =
+                    Thread.currentThread()
+                            .getContextClassLoader()
+                            .getResourceAsStream(CLIENT_VERSION_PROPERTY_FILE);
             Properties properties = new Properties();
             properties.load(propsStream);
             return properties.getProperty(ARCHAIUS_CLIENT_VERSION_PROPERTY);
