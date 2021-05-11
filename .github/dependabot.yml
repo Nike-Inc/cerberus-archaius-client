@@ -8,10 +8,9 @@ updates:
     # Look for `build.gradle`  files in the `root` directory
     directory: "/"
     target-branch: "dep/dependency_upgrade_staging"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 20
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "monthly"
       time: "08:00"
       timezone: "America/Los_Angeles"
   - package-ecosystem: "github-actions"
@@ -20,7 +19,6 @@ updates:
     target-branch: "dep/dependency_upgrade_staging"
     # Check the npm registry for updates every day (weekdays)
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "monthly"
       time: "08:00"
       timezone: "America/Los_Angeles"
