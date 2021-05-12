@@ -24,7 +24,7 @@ jobs:
       - name: Test with Gradle
         run: ./gradlew check
       - name: Upload coverage report to CodeCov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v1.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
           file: ./build/reports/cobertura/coverage.xml # optional
