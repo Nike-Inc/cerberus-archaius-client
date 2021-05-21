@@ -15,9 +15,3 @@
  */
 
 rootProject.name = artifactId
-
-sourceControl {
-  gitRepository("https://github.com/Nike-Inc/cerberus-java-client.git") {
-    producesModule("com.nike:cerberus-client")
-  }
-}
