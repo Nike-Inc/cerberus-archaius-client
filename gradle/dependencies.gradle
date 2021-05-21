@@ -32,8 +32,8 @@ configurations.all {
         force "org.apache.httpcomponents:httpclient:4.5.13"
 
         dependencySubstitution {
-            substitute module("org.mortbay.jetty:jetty") with module("org.eclipse.jetty:jetty-server:9.4.33.v20201020")
-            substitute module("org.mortbay.jetty:jetty-util") with module("org.eclipse.jetty:jetty-util:9.4.33.v20201020")
+            substitute module("org.mortbay.jetty:jetty") with module("org.eclipse.jetty:jetty-server:9.4.41.v20210516")
+            substitute module("org.mortbay.jetty:jetty-util") with module("org.eclipse.jetty:jetty-util:9.4.41.v20210516")
             substitute module("org.mortbay.jetty:jetty-http") with module("org.eclipse.jetty:jetty-http:11.0.0")
         }
     }
@@ -41,11 +41,7 @@ configurations.all {
 }
 
 dependencies {
-    implementation('com.nike:cerberus-client'){
-        version {
-            branch = 'master'
-        }
-    }
+    compile 'com.nike:cerberus-client:7.4.+'
     compile "com.amazonaws:aws-java-sdk-core:${AWS_SDK_VERSION}"
     compile 'com.netflix.archaius:archaius-aws:0.7.7'
     compile 'com.netflix.archaius:archaius-core:0.7.7'
