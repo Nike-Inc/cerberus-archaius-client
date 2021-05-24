@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 import com.nike.cerberus.client.CerberusClient;
 import com.nike.cerberus.client.CerberusClientException;
-import okhttp3.HttpUrl;
+import cerberus.okhttp3.HttpUrl;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.junit.Before;
 import org.junit.Test;
