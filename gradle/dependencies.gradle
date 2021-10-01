@@ -46,7 +46,7 @@ dependencies {
     compile 'com.nike:cerberus-client:7.4.0'
 
     compile "org.apache.commons:commons-lang3:3.11"
-    compile "com.squareup.okhttp3:okhttp:3.9.0"
+    compile "com.squareup.okhttp3:okhttp:4.9.2"
 
     compile 'org.slf4j:slf4j-api:1.7.30'
     testRuntime 'org.slf4j:slf4j-simple:1.7.30'
