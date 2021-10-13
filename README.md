@@ -1,7 +1,7 @@
 # Cerberus Archaius Client
 
 
-![OSS Lifecycle](https://img.shields.io/osslifecycle/Nike-Inc/cerberus-archaius-client)
+![OSS Lifecycle](https://img.shields.io/osslifecycle/Nike-Inc/cerberus-archaius-client/docs/deprecation-notice)
 [![][license img]][license]
 
 A java based client library that surfaces Cerberus secrets via Archaius.
@@ -12,7 +12,9 @@ enables dynamic runtime properties from multiple configuration sources such as U
 To learn more about Cerberus, please visit the [Cerberus website](http://engineering.nike.com/cerberus/).
 
 # Deprecation Notice 10/14/2021
-As of October 2021 the Cerberus team has decided to deprecate the Cerberus Archaius Client. This repository will be archived and marked as read-only. You are free to continue using the client if it serves your purposes but no support will be provided from now on.
+Netflix's [Archaius](https://github.com/Netflix/archaius) seems to have been completely abandoned with its latest release being in 2019. There are several dozen unresolved issues and pull requests and the wiki hasn't been updated since 2013. This is a potential security concern and it raises concerns with key library incompatibilities.
+
+With that in mind, as of October 2021, support for the Cerberus Archaius Client has been deprecated. This repository will be archived and marked as read-only. You are free to continue using the client if it serves your purposes but no support will be provided. We recommend other available secure Java clients in its place. You can find [all available clients here](https://engineering.nike.com/cerberus/components/).
 
 ## Publishing Notice 3/17/2021
 As of spring 2021, JFrog has decided to sunset Bintray and JCenter.
