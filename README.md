@@ -1,7 +1,7 @@
 # Cerberus Archaius Client
 
 
-![OSS Lifecycle](https://img.shields.io/osslifecycle/Nike-Inc/cerberus-archaius-client/docs/deprecation-notice)
+![OSS Lifecycle](https://img.shields.io/osslifecycle/Nike-Inc/cerberus-archaius-client)
 [![][license img]][license]
 
 A java based client library that surfaces Cerberus secrets via Archaius.
