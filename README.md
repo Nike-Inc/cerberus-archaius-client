@@ -1,8 +1,7 @@
 # Cerberus Archaius Client
 
-[ ![Download](https://api.bintray.com/packages/nike/maven/cerberus-archaius-client/images/download.svg) ](https://bintray.com/nike/maven/cerberus-archaius-client/_latestVersion)
-![][gh actions img]
-[![codecov](https://codecov.io/gh/Nike-Inc/cerberus-archaius-client/branch/master/graph/badge.svg)](https://codecov.io/gh/Nike-Inc/cerberus-archaius-client)
+
+![OSS Lifecycle](https://img.shields.io/osslifecycle/Nike-Inc/cerberus-archaius-client)
 [![][license img]][license]
 
 A java based client library that surfaces Cerberus secrets via Archaius.
@@ -11,6 +10,11 @@ A java based client library that surfaces Cerberus secrets via Archaius.
 enables dynamic runtime properties from multiple configuration sources such as URLs, JDBC, and Amazon DynamoDB.
 
 To learn more about Cerberus, please visit the [Cerberus website](http://engineering.nike.com/cerberus/).
+
+# Deprecation Notice 10/14/2021
+Netflix's [Archaius](https://github.com/Netflix/archaius) seems to have been completely abandoned with its latest release being in 2019. There are several dozen unresolved issues and pull requests and the wiki hasn't been updated since 2013. This is a potential security concern and it raises concerns with key library incompatibilities.
+
+With that in mind, as of October 2021, support for the Cerberus Archaius Client has been deprecated. This repository will be archived and marked as read-only. You are free to continue using the client if it serves your purposes but no support will be provided. We recommend other available secure Java clients in its place. You can find [all available clients here](https://engineering.nike.com/cerberus/components/).
 
 ## Publishing Notice 3/17/2021
 As of spring 2021, JFrog has decided to sunset Bintray and JCenter.
@@ -23,8 +27,6 @@ In order to build the jar yourself, run this command:
 ```
 
 The jar will be located in `./build/libs/`.
-
-For any questions or concerns, create a Github issue [here](https://github.com/Nike-Inc/cerberus-archaius-client/issues/new).
 
 ## Quickstart
 
